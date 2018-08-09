@@ -16,17 +16,11 @@
 
 #include QMK_KEYBOARD_H
 
-#include "quantum.h"
-#include "action.h"
-#include "mousekey.h"
-#include "process_keycode/process_tap_dance.h"
-
 extern keymap_config_t keymap_config;
 
 enum layers {
   _QWERTY,
-  _MOUSE,
-  _SPACEFN,
+  _COLEMAK,
   _DVORAK,
   _LOWER,
   _RAISE,
@@ -37,7 +31,7 @@ enum layers {
 
 enum keycodes {
   QWERTY = SAFE_RANGE,
-  SPACEFN,
+  COLEMAK,
   DVORAK,
   PLOVER,
   LOWER,
@@ -45,27 +39,6 @@ enum keycodes {
   BACKLIT,
   EXT_PLV
 };
-
-enum {
-    SINGLE_TAP = 1,
-    SINGLE_HOLD = 2,
-    DOUBLE_TAP = 3,
-    DOUBLE_HOLD = 4,
-    DOUBLE_SINGLE_TAP = 5, //send two single taps
-    TRIPLE_TAP = 6,
-    TRIPLE_HOLD = 7
-};
-
-//Tap dance enums
-enum {
-    CLICK = 0,
-    TD_SCLN_QUOT,
-};
-
-typedef struct {
-    bool is_press_action;
-    int state;
-} xtap;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -81,28 +54,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_mit(
-  ALT_T(KC_TAB),  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-  CTL_T(KC_ESC),  LT(_MOUSE, KC_A),    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN_QUOT), KC_ENT,
-  OSM(MOD_LSFT), GUI_T(KC_Z),    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_SFTENT ,
-  KC_LALT, KC_LGUI, KC_LGUI, KC_LGUI, LOWER,       LT(_SPACEFN, KC_SPC),       RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
-),
-
-/* Mouse
- * ,---------------------------------------------------------------------------------------|
- * | Tab  |   Q  |   W  | MS_U |   R  | MOD_LGUI |   Y  |   U  |   I  |   O  |   P  | Bksp |
- * |------+------+------+------+------+----------+------+------+------+------+------|------|
- * | LCTL | TRNS | MS_L | MS_D | MS_L | MOD_LCTL |   H  |   J  |   K  |   L  | ACL0 | ACL2 |
- * |------+------+------+------+------+----------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  | MOD_LALT |   N  |   M  |   ,  |   .  |   /  |Enter |
- * |------+------+------+------+------+----------+------+------+------+------+------+------|
- * | Ctrl | Alt  | GUI  |Brite |Lower |    Space    |Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
- */
-[_MOUSE] = LAYOUT_planck_mit(
-  KC_TAB , KC_Q   , KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI   , KC_Y   , KC_U   , KC_I   , KC_O  , KC_P   , KC_BSPC,
-  KC_LCTL, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL   , KC_H   , KC_J   , KC_K   , KC_L  , KC_ACL0, KC_ACL1,
-  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_LALT   , KC_N   , KC_M   , KC_COMM, KC_DOT, KC_SLSH, KC_ENT ,
-  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, KC_BTN2, TD(CLICK), KC_BTN3, KC_LEFT, KC_DOWN, KC_UP , KC_RGHT
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
+  KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT ,
+  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER,       KC_SPC,       RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
 /* Colemak
@@ -116,11 +71,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Ctrl | Alt  | GUI  |Brite |Lower |    Space    |Raise | Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
-[_SPACEFN] = LAYOUT_planck_mit(
-  KC_BSLS, KC_EQL , KC_MINS, KC_UP  , KC_PIPE, KC_TAB, KC_J , KC_L   , KC_U   , KC_Y  , KC_SCLN, KC_BSPC,
-  KC_ENT , KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_D  , KC_H , KC_N   , KC_E   , KC_I  , KC_O   , KC_QUOT,
-  KC_LSFT, KC_RPRN, KC_LCBR, KC_RCBR, KC_V   , KC_B  , KC_K , KC_M   , KC_COMM, KC_DOT, KC_SLSH, KC_ENT ,
-  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER  , KC_SPC, RAISE, KC_LEFT, KC_DOWN, KC_UP , KC_RGHT
+[_COLEMAK] = LAYOUT_planck_mit(
+  KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSPC,
+  KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT,
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT ,
+  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER,       KC_SPC,       RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
 /* Dvorak
@@ -209,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = LAYOUT_planck_mit(
   _______, RESET,   DEBUG,   _______, _______, _______, _______, TERM_ON, TERM_OFF,_______, _______, KC_DEL ,
-  _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  SPACEFN, DVORAK,  PLOVER,  _______,
+  _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK, DVORAK,  PLOVER,  _______,
   _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
   _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______
 ),
@@ -249,9 +204,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case SPACEFN:
+    case COLEMAK:
       if (record->event.pressed) {
-        set_single_persistent_default_layer(_SPACEFN);
+        set_single_persistent_default_layer(_COLEMAK);
       }
       return false;
       break;
@@ -322,91 +277,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
-
-int cur_dance (qk_tap_dance_state_t *state) {
-  if (state->count == 1) {
-    if (state->interrupted || !state->pressed)  return SINGLE_TAP;
-    //key has not been interrupted, but they key is still held. Means you want to send a 'HOLD'.
-    else return SINGLE_HOLD;
-  }
-  else if (state->count == 2) {
-    /*
-     * DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
-     * action when hitting 'pp'. Suggested use case for this return value is when you want to send two
-     * keystrokes of the key, and not the 'double tap' action/macro.
-    */
-    if (state->interrupted) return DOUBLE_SINGLE_TAP;
-    else if (state->pressed) return DOUBLE_HOLD;
-    else return DOUBLE_TAP;
-  }
-  //Assumes no one is trying to type the same letter three times (at least not quickly).
-  //If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
-  //an exception here to return a 'TRIPLE_SINGLE_TAP', and define that enum just like 'DOUBLE_SINGLE_TAP'
-  if (state->count == 3) {
-    if (state->interrupted || !state->pressed)  return TRIPLE_TAP;
-    else return TRIPLE_HOLD;
-  }
-  else return 8; //magic number. At some point this method will expand to work for more presses
-}
-
-//instanalize an instance of 'tap' for the 'x' tap dance.
-static xtap xtap_state = {
-  .is_press_action = true,
-  .state = 0
-};
-
-void click_finished (qk_tap_dance_state_t *state, void *user_data) {
-  xtap_state.state = cur_dance(state);
-  switch (xtap_state.state) {
-    case SINGLE_TAP:
-        mousekey_on(KC_BTN1);
-        break;
-    case SINGLE_HOLD:
-        mousekey_on(KC_ACL0);
-        mousekey_send();
-        break;
-    case DOUBLE_TAP:
-        mousekey_on(KC_BTN2);
-        mousekey_send();
-        break;
-    case DOUBLE_HOLD:
-        mousekey_on(KC_BTN1);
-        mousekey_send();
-        break;
-    case DOUBLE_SINGLE_TAP:
-        mousekey_on(KC_BTN1);
-        mousekey_send();
-  }
-}
-
-void click_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_state.state) {
-    case SINGLE_TAP:
-        mousekey_send();
-        mousekey_off(KC_BTN1);
-        mousekey_send();
-        break;
-    case SINGLE_HOLD:
-        mousekey_off(KC_ACL0);
-        mousekey_send();
-        break;
-    case DOUBLE_TAP:
-        mousekey_off(KC_BTN2);
-        mousekey_send();
-        break;
-    case DOUBLE_HOLD:
-        mousekey_off(KC_BTN1);
-        mousekey_send();
-        break;
-    case DOUBLE_SINGLE_TAP:
-        mousekey_send();
-        mousekey_off(KC_BTN1);
-        mousekey_send();
-  }
-  xtap_state.state = 0;
-}
-
-qk_tap_dance_action_t tap_dance_actions[] = {
-    [CLICK]                               = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished, click_reset),
-    [TD_SCLN_QUOT]                        = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_QUOT),
-};
