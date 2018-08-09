@@ -26,7 +26,7 @@ extern keymap_config_t keymap_config;
 enum layers {
   _QWERTY,
   _MOUSE,
-  _COLEMAK,
+  _SPACEFN,
   _DVORAK,
   _LOWER,
   _RAISE,
@@ -37,7 +37,7 @@ enum layers {
 
 enum keycodes {
   QWERTY = SAFE_RANGE,
-  COLEMAK,
+  SPACEFN,
   DVORAK,
   PLOVER,
   LOWER,
@@ -84,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ALT_T(KC_TAB),  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
   CTL_T(KC_ESC),  LT(_MOUSE, KC_A),    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN_QUOT), KC_ENT,
   OSM(MOD_LSFT), GUI_T(KC_Z),    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_SFTENT ,
-  KC_LALT, KC_LGUI, KC_LGUI, KC_LGUI, LOWER,       KC_SPC,       RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+  KC_LALT, KC_LGUI, KC_LGUI, KC_LGUI, LOWER,       LT(_SPACEFN, KC_SPC),       RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
 /* Mouse
@@ -116,11 +116,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Ctrl | Alt  | GUI  |Brite |Lower |    Space    |Raise | Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
-[_COLEMAK] = LAYOUT_planck_mit(
-  KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSPC,
-  KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT,
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT ,
-  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER,       KC_SPC,       RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+[_SPACEFN] = LAYOUT_planck_mit(
+  KC_BSLS, KC_EQL , KC_MINS, KC_U   , KC_PIPE , KC_TAB, KC_J , KC_L   , KC_U   , KC_Y  , KC_SCLN, KC_BSPC,
+  KC_ENT , KC_LPRN, KC_L   , KC_D   , KC_R , KC_D  , KC_H , KC_N   , KC_E   , KC_I  , KC_O   , KC_QUOT,
+  KC_LSFT, KC_RPRN, KC_LCBR, KC_RCBR   , KC_V , KC_B  , KC_K , KC_M   , KC_COMM, KC_DOT, KC_SLSH, KC_ENT ,
+  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER, KC_SPC, RAISE, KC_LEFT, KC_DOWN, KC_UP , KC_RGHT
 ),
 
 /* Dvorak
@@ -209,7 +209,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = LAYOUT_planck_mit(
   _______, RESET,   DEBUG,   _______, _______, _______, _______, TERM_ON, TERM_OFF,_______, _______, KC_DEL ,
-  _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK, DVORAK,  PLOVER,  _______,
+  _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  SPACEFN, DVORAK,  PLOVER,  _______,
   _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
   _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______
 ),
@@ -249,9 +249,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case COLEMAK:
+    case SPACEFN:
       if (record->event.pressed) {
-        set_single_persistent_default_layer(_COLEMAK);
+        set_single_persistent_default_layer(_SPACEFN);
       }
       return false;
       break;
