@@ -13,6 +13,8 @@
 #define MOUSEKEY_TIME_TO_MAX    5
 #define MOUSEKEY_WHEEL_DELAY    0
 
+#define LEADER_TIMEOUT 800
+
 #ifdef TAPPING_TERM
   #undef TAPPING_TERM
   #define TAPPING_TERM 180
