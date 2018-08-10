@@ -12,6 +12,8 @@
 #define MOUSEKEY_WHEEL_DELAY    0
 #define MOUSEKEY_WHEEL_TIME_TO_MAX 40
 
+#define TAPPING_TERM 180
+
 /*
  * MIDI options
  */
