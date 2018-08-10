@@ -87,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                 KC_RALT, KC_RGUI, KC_SPC, KC_TRNS, KC_LALT),
 
     [_SPACEFN] = LAYOUT(
-        KC_BSLS, KC_EQL, KC_MINS, KC_0, KC_9, KC_8, KC_7, KC_P7, KC_P8, KC_P9, KC_PMNS, KC_PPLS, KC_TRNS, KC_TRNS, RESET,
+        KC_BSLS, KC_EQL, KC_MINS, KC_0   , KC_9   , KC_8    , KC_7   , KC_P7  , KC_P8, KC_P9  , KC_PMNS, KC_PPLS, KC_TRNS, KC_TRNS, RESET,
         GUI_T(KC_BSPC) , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE , KC_BSLS, KC_BSPC, KC_P4, KC_P5  , KC_P6  , KC_PENT, KC_PAST, KC_PSLS, KC_TAB,
         CTL_T(KC_ENT)  , KC_LPRN, KC_LEFT, KC_DOWN, KC_RIGHT, KC_PGUP, KC_HOME, KC_P1, KC_P2  , KC_P3  , KC_MINS, KC_EQL , KC_ENT,
         F(0)           , KC_RPRN, KC_LCBR, KC_RCBR, KC_PGDN , KC_END , KC_DEL , KC_P0, KC_PEQL, KC_PDOT, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -95,9 +95,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_OTHER] = LAYOUT(
         KC_TRNS, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_TRNS, KC_TRNS,
-        KC_TAB, KC_F7, KC_F8, KC_HOME, KC_PGUP, KC_PGDN, KC_END, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_BSPC,
-        KC_LCTL, KC_F9, KC_TRNS, KC_BSPC, KC_DEL, KC_TRNS, KC_TRNS, KC_MPRV, KC_MNXT, KC_MUTE, KC_TRNS, KC_MPLY, KC_ENT,
-        KC_LSFT, KC_F10, KC_F11, KC_F12, KC_F13, KC_F14, KC_TRNS, KC_VOLD, KC_VOLU, KC_TRNS, KC_TRNS, KC_RSFT, KC_TRNS,
+        KC_TAB , KC_F7, KC_TRNS, KC_HOME, KC_PGUP, KC_PGDN, KC_END , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_BSPC,
+        KC_LCTL, KC_F8, KC_TRNS, KC_BSPC, KC_DEL , KC_TRNS, KC_TRNS, KC_MPRV, KC_MNXT, KC_MUTE, KC_TRNS, KC_MPLY, KC_ENT,
+        KC_LSFT, KC_F9, KC_F10, KC_F11  , KC_F12 , KC_F13 , KC_F14 , KC_F15, KC_TRNS, KC_TRNS, KC_TRNS, KC_RSFT, KC_TRNS,
                                 KC_LGUI, KC_LALT, KC_ENT, KC_RGUI, KC_RALT)};
 
 int cur_dance (qk_tap_dance_state_t *state) {
@@ -158,6 +158,60 @@ void click_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void click_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        mousekey_send();
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+        break;
+    case SINGLE_HOLD:
+        mousekey_off(KC_ACL0);
+        mousekey_send();
+        break;
+    case DOUBLE_TAP:
+        mousekey_send();
+        mousekey_off(KC_BTN2);
+        mousekey_send();
+        break;
+    case DOUBLE_HOLD:
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+        break;
+    case DOUBLE_SINGLE_TAP:
+        mousekey_on(KC_BTN1);
+        mousekey_send();
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+  }
+  xtap_state.state = 0;
+}
+
+void space_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_state.state = cur_dance(state);
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        mousekey_on(KC_BTN1);
+        break;
+    case SINGLE_HOLD:
+        mousekey_on(KC_ACL0);
+        mousekey_send();
+        break;
+    case DOUBLE_TAP:
+        mousekey_on(KC_BTN2);
+        break;
+    case DOUBLE_HOLD:
+        mousekey_on(KC_BTN1);
+        mousekey_send();
+        break;
+    case DOUBLE_SINGLE_TAP:
+        mousekey_on(KC_BTN1);
+        mousekey_send();
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+  }
+}
+
+void space_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_state.state) {
     case SINGLE_TAP:
         mousekey_send();
