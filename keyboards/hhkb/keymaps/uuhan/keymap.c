@@ -9,23 +9,13 @@
 extern keymap_config_t keymap_config;
 
 enum layers {
-    _BASE = 0,
-    _HHKB,
-    _MOUSE_L,
-    _MOUSE_R,
-    _MIRROR,
-    _SPACEFN,
-    _OTHER,
-};
-
-enum keycodes {
-    BASE = SAFE_RANGE,
+    BASE = 0,
     HHKB,
     MOUSE_L,
     MOUSE_R,
     MIRROR,
     SPACEFN,
-    OTHER,
+    FNKEYS,
 };
 
 enum {
@@ -42,6 +32,7 @@ enum {
     CLICK = 0,
     SPACE,
     QUOTE,
+    SCLN,
 };
 
 typedef struct {
@@ -54,49 +45,49 @@ typedef struct {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-    [_BASE] = LAYOUT( //  default layer
+    [BASE] = LAYOUT( //  default layer
         KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSLS, KC_LEAD,
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
-        CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_OTHER, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, LT(_MOUSE_R, KC_SCLN), TD(QUOTE), MT(KC_RCTL, KC_ENT),
+        CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(KC_RCTL, KC_ENT),
         OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, MT(KC_RGUI, KC_SLSH), MT(KC_RSFT, KC_ESC), TT(HHKB),
-                            KC_LALT, LT(_MIRROR, KC_GRV), TD(SPACE), TT(_MIRROR), KC_RALT),
+                            KC_LALT, LT(MIRROR, KC_GRV), TD(SPACE), TT(MIRROR), KC_RALT),
 
-    [_HHKB] = LAYOUT(
+    [HHKB] = LAYOUT(
         KC_GRV, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_INS, KC_DEL,
         KC_CAPS, KC_F13, KC_F14, KC_F15, KC_F16, KC_F17, KC_F18, KC_F19, KC_PSCR, KC_SLCK, KC_PAUS, KC_UP, KC_TRNS, KC_BSPC,
         KC_LCTL, KC_VOLD, KC_VOLU, KC_MUTE, KC_NO, KC_NO, KC_PAST, KC_PSLS, KC_HOME, KC_PGUP, KC_LEFT, KC_RGHT, KC_ENT,
         KC_LSFT, KC_F20, KC_F21, KC_F22, KC_F23, KC_F24, KC_PPLS, KC_PMNS, KC_END, KC_PGDN, KC_DOWN, KC_RSFT, KC_TRNS,
                                 KC_LALT, KC_LGUI, KC_LGUI, KC_RGUI, KC_RALT),
 
-    [_MOUSE_L] = LAYOUT(
+    [MOUSE_L] = LAYOUT(
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TAB , KC_TRNS, KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI, KC_ESC , KC_HOME, KC_PGUP, KC_PGDN, KC_END , KC_TRNS, KC_TRNS, KC_BSPC,
         KC_ACL0, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL, KC_BSPC, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN4, KC_BTN5, KC_ENT,
         KC_LSFT, KC_ACL0, KC_TRNS, KC_BTN3, KC_BTN2, KC_LALT, KC_WH_L, KC_WH_R, KC_ACL0, KC_ACL1, KC_ACL2, KC_TRNS, KC_TRNS,
                                 KC_LGUI, KC_LALT, TD(CLICK), KC_RALT, KC_RGUI),
 
-    [_MOUSE_R] = LAYOUT(
+    [MOUSE_R] = LAYOUT(
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_HOME, KC_PGUP, KC_PGDN, KC_END , KC_ESC , KC_RGUI, KC_WH_D, KC_MS_U, KC_WH_U, KC_ACL0, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_BTN5, KC_BTN4, KC_BTN2, KC_BTN3, KC_BTN1, KC_DEL , KC_RCTL, KC_MS_L, KC_MS_D, KC_MS_R, KC_TRNS, KC_ACL0, KC_ENT,
         KC_LSFT, KC_ACL2, KC_ACL1, KC_ACL0, KC_WH_L, KC_WH_R, KC_RALT, KC_BTN2, KC_BTN3, KC_TRNS, KC_TRNS, KC_RSFT, KC_TRNS,
                                 KC_LGUI, KC_LALT, TD(CLICK), KC_TRNS, KC_TRNS),
 
-    [_MIRROR] = LAYOUT(
+    [MIRROR] = LAYOUT(
         KC_GRV, KC_BSLS, KC_EQL, KC_MINS, KC_0, KC_9, KC_8, KC_7, KC_6, KC_5, KC_4, KC_3, KC_2, KC_1, KC_ESC,
         KC_BSPC, KC_P, KC_O, KC_I, KC_U, KC_Y, KC_T, KC_R, KC_E, KC_W, KC_Q, KC_LBRC, KC_RBRC, KC_TAB,
         RCTL_T(KC_ENT), KC_SCLN, KC_L, KC_K, KC_J, KC_H, KC_G, KC_F, KC_D, KC_S, KC_A, KC_QUOT, CTL_T(KC_ESC),
         KC_RSFT, KC_SLSH, KC_DOT, KC_COMM, KC_M, KC_N, KC_B, KC_V, KC_C, KC_X, KC_Z, KC_LSFT, KC_TRNS,
                                 KC_RALT, KC_TRNS, KC_SPC, KC_TRNS, KC_LALT),
 
-    [_SPACEFN] = LAYOUT(
+    [SPACEFN] = LAYOUT(
         KC_BSLS, KC_EQL, KC_MINS, KC_0   , KC_9   , KC_8    , KC_7   , KC_P7  , KC_P8, KC_P9  , KC_PMNS, KC_PPLS, KC_TRNS, KC_TRNS, RESET,
         GUI_T(KC_BSPC) , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE , KC_BSLS, KC_BSPC, KC_P4, KC_P5  , KC_P6  , KC_PENT, KC_PAST, KC_PSLS, KC_TAB,
         CTL_T(KC_ENT)  , KC_LPRN, KC_LEFT, KC_DOWN, KC_RIGHT, KC_PGUP, KC_HOME, KC_P1, KC_P2  , KC_P3  , KC_MINS, KC_EQL , KC_ENT,
         ACTION_MODS_TAP_TOGGLE(MOD_LSFT)       , KC_RPRN, KC_LCBR, KC_RCBR, KC_PGDN , KC_END , KC_DEL , KC_P0, KC_PEQL, KC_PDOT, KC_TRNS, KC_TRNS, KC_TRNS,
                                 KC_RALT, KC_RGUI, KC_TRNS, KC_LGUI, KC_LALT),
 
-    [_OTHER] = LAYOUT(
+    [FNKEYS] = LAYOUT(
         KC_TRNS, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_TRNS, KC_TRNS,
         KC_TAB , KC_F7, KC_TRNS, KC_HOME, KC_PGUP, KC_PGDN, KC_END , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_BSPC,
         KC_LCTL, KC_F8, KC_TRNS, KC_BSPC, KC_DEL , KC_TRNS, KC_TRNS, KC_MPRV, KC_MNXT, KC_MUTE, KC_TRNS, KC_MPLY, KC_ENT,
@@ -196,7 +187,7 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_SPC);
         break;
     case SINGLE_HOLD:
-        layer_on(_SPACEFN);
+        layer_on(SPACEFN);
         break;
     case DOUBLE_TAP:
         register_code(KC_ENT);
@@ -217,7 +208,7 @@ void space_reset (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_SPC);
         break;
     case SINGLE_HOLD:
-        layer_off(_SPACEFN);
+        layer_off(SPACEFN);
         break;
     case DOUBLE_TAP:
         unregister_code(KC_ENT);
@@ -231,10 +222,55 @@ void space_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_state.state = 0;
 }
 
+void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_state.state = cur_dance(state);
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        register_code(KC_SCLN);
+        break;
+    case SINGLE_HOLD:
+        layer_on(MOUSE_R);
+        break;
+    case DOUBLE_TAP:
+        add_weak_mods(MOD_LSFT);
+        register_code(KC_SCLN);
+        break;
+    case DOUBLE_HOLD:
+        register_code(KC_RCTL);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        register_code(KC_SCLN);
+        unregister_code(KC_SCLN);
+        register_code(KC_SCLN);
+  }
+}
+
+void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        unregister_code(KC_SCLN);
+        break;
+    case SINGLE_HOLD:
+        layer_off(MOUSE_R);
+        break;
+    case DOUBLE_TAP:
+        del_weak_mods(KC_LSFT);
+        unregister_code(KC_SCLN);
+        break;
+    case DOUBLE_HOLD:
+        unregister_code(KC_RCTL);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        unregister_code(KC_SCLN);
+  }
+  xtap_state.state = 0;
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
     [QUOTE] = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
+    [SCLN]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
 };
 
 LEADER_EXTERNS();
