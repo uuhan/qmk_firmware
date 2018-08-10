@@ -54,7 +54,7 @@ typedef struct {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_BASE] = LAYOUT( //  default layer
-        KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSLS, KC_GRV,
+        KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSLS, KC_LEAD,
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
         CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_OTHER, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, LT(_MOUSE_R, KC_SCLN), TD(QUOTE), MT(KC_RCTL, KC_ENT),
         OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, MT(KC_RGUI, KC_SLSH), MT(KC_RSFT, KC_ESC), TT(HHKB),
@@ -86,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_BSPC, KC_P, KC_O, KC_I, KC_U, KC_Y, KC_T, KC_R, KC_E, KC_W, KC_Q, KC_LBRC, KC_RBRC, KC_TAB,
         RCTL_T(KC_ENT), KC_SCLN, KC_L, KC_K, KC_J, KC_H, KC_G, KC_F, KC_D, KC_S, KC_A, KC_QUOT, CTL_T(KC_ESC),
         KC_RSFT, KC_SLSH, KC_DOT, KC_COMM, KC_M, KC_N, KC_B, KC_V, KC_C, KC_X, KC_Z, KC_LSFT, KC_TRNS,
-                                KC_RALT, KC_RGUI, KC_SPC, KC_TRNS, KC_LALT),
+                                KC_RALT, KC_TRNS, KC_SPC, KC_TRNS, KC_LALT),
 
     [_SPACEFN] = LAYOUT(
         KC_BSLS, KC_EQL, KC_MINS, KC_0   , KC_9   , KC_8    , KC_7   , KC_P7  , KC_P8, KC_P9  , KC_PMNS, KC_PPLS, KC_TRNS, KC_TRNS, RESET,
