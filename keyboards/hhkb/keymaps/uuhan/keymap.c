@@ -100,25 +100,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LSFT, KC_F10, KC_F11, KC_F12, KC_F13, KC_F14, KC_TRNS, KC_VOLD, KC_VOLU, KC_TRNS, KC_TRNS, KC_RSFT, KC_TRNS,
                                 KC_LGUI, KC_LALT, KC_ENT, KC_RGUI, KC_RALT)};
 
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
-{
-    // MACRODOWN only works in this function
-    switch (id)
-    {
-    case 0:
-        if (record->event.pressed)
-        {
-            register_code(KC_RSFT);
-        }
-        else
-        {
-            unregister_code(KC_RSFT);
-        }
-        break;
-    }
-    return MACRO_NONE;
-};
-
 int cur_dance (qk_tap_dance_state_t *state) {
   if (state->count == 1) {
     if (state->interrupted || !state->pressed)  return SINGLE_TAP;
@@ -163,7 +144,6 @@ void click_finished (qk_tap_dance_state_t *state, void *user_data) {
         break;
     case DOUBLE_TAP:
         mousekey_on(KC_BTN2);
-        mousekey_send();
         break;
     case DOUBLE_HOLD:
         mousekey_on(KC_BTN1);
@@ -171,6 +151,8 @@ void click_finished (qk_tap_dance_state_t *state, void *user_data) {
         break;
     case DOUBLE_SINGLE_TAP:
         mousekey_on(KC_BTN1);
+        mousekey_send();
+        mousekey_off(KC_BTN1);
         mousekey_send();
   }
 }
@@ -187,6 +169,7 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
         mousekey_send();
         break;
     case DOUBLE_TAP:
+        mousekey_send();
         mousekey_off(KC_BTN2);
         mousekey_send();
         break;
@@ -195,6 +178,7 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
         mousekey_send();
         break;
     case DOUBLE_SINGLE_TAP:
+        mousekey_on(KC_BTN1);
         mousekey_send();
         mousekey_off(KC_BTN1);
         mousekey_send();
