@@ -33,6 +33,10 @@ enum {
     SPACE,
     QUOTE,
     SCLN,
+    GRAVE,
+    TDF1, TDF2, TDF3, TDF4,
+    TDF5, TDF6, TDF7, TDF8,
+    TDF9, TDF10, TDF11, TDF12,
 };
 
 typedef struct {
@@ -46,11 +50,11 @@ typedef struct {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [BASE] = LAYOUT( //  default layer
-        KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSLS, KC_LEAD,
+        KC_ESC, TD(TDF1), TD(TDF2), TD(TDF3), TD(TDF4), TD(TDF5), TD(TDF6), TD(TDF7), TD(TDF8), TD(TDF9), TD(TDF10), TD(TDF11), TD(TDF12), KC_BSLS, KC_LEAD,
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
         CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(KC_RCTL, KC_ENT),
         OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, MT(KC_RGUI, KC_SLSH), MT(KC_RSFT, KC_ESC), TT(HHKB),
-                            KC_LALT, LT(MIRROR, KC_GRV), TD(SPACE), TT(MIRROR), KC_RALT),
+                            KC_LALT, TD(GRAVE), TD(SPACE), TT(MIRROR), KC_RALT),
 
     [HHKB] = LAYOUT(
         KC_GRV, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_INS, KC_DEL,
@@ -266,11 +270,69 @@ void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_state.state = 0;
 }
 
+void grave_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_state.state = cur_dance(state);
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        register_code(KC_GRV);
+        break;
+    case SINGLE_HOLD:
+        layer_on(MIRROR);
+        break;
+    case DOUBLE_TAP:
+        add_weak_mods(MOD_LSFT);
+        register_code(KC_GRV);
+        break;
+    case DOUBLE_HOLD:
+        register_code(KC_GRV);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        register_code(KC_GRV);
+        unregister_code(KC_GRV);
+        register_code(KC_GRV);
+  }
+}
+
+void grave_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        unregister_code(KC_GRV);
+        break;
+    case SINGLE_HOLD:
+        layer_off(MIRROR);
+        break;
+    case DOUBLE_TAP:
+        del_weak_mods(KC_LSFT);
+        unregister_code(KC_GRV);
+        break;
+    case DOUBLE_HOLD:
+        unregister_code(KC_GRV);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        unregister_code(KC_GRV);
+  }
+  xtap_state.state = 0;
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
     [QUOTE] = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
     [SCLN]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
+    [GRAVE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,grave_finished,grave_reset),
+
+    [TDF1]  = ACTION_TAP_DANCE_DOUBLE(KC_1   , KC_F1),
+    [TDF2]  = ACTION_TAP_DANCE_DOUBLE(KC_2   , KC_F2),
+    [TDF3]  = ACTION_TAP_DANCE_DOUBLE(KC_3   , KC_F3),
+    [TDF4]  = ACTION_TAP_DANCE_DOUBLE(KC_4   , KC_F4),
+    [TDF5]  = ACTION_TAP_DANCE_DOUBLE(KC_5   , KC_F5),
+    [TDF6]  = ACTION_TAP_DANCE_DOUBLE(KC_6   , KC_F6),
+    [TDF7]  = ACTION_TAP_DANCE_DOUBLE(KC_7   , KC_F7),
+    [TDF8]  = ACTION_TAP_DANCE_DOUBLE(KC_8   , KC_F8),
+    [TDF9]  = ACTION_TAP_DANCE_DOUBLE(KC_9   , KC_F9),
+    [TDF10] = ACTION_TAP_DANCE_DOUBLE(KC_0   , KC_F10),
+    [TDF11] = ACTION_TAP_DANCE_DOUBLE(KC_MINS, KC_F11),
+    [TDF12] = ACTION_TAP_DANCE_DOUBLE(KC_EQL , KC_F12),
 };
 
 LEADER_EXTERNS();
@@ -288,16 +350,7 @@ void matrix_scan_user(void) {
             SEND_STRING(SS_LALT(SS_LGUI("k")));
         }
         SEQ_ONE_KEY(KC_E) {
-            SEND_STRING(SS_LALT(SS_LGUI("s")));
-        }
-        SEQ_ONE_KEY(KC_R) {
-            SEND_STRING(SS_LSFT(SS_TAP(X_F7)));
-        }
-        SEQ_ONE_KEY(KC_T) {
             SEND_STRING(SS_LALT(SS_LGUI("e")));
-        }
-        SEQ_ONE_KEY(KC_ESC) {
-            SEND_STRING(SS_TAP(X_F12));
         }
     }
 }
