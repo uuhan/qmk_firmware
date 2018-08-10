@@ -18,6 +18,9 @@
   #define TAPPING_TERM 180
 #endif
 
+// Disable MACRO support to shrink size
+#define NO_ACTION_MACRO
+
 // Set up tapdance functionality
 //#define TAPPING_TOGGLE  1
 // TAPPING_TERM is set in config.h this defaults to 200
