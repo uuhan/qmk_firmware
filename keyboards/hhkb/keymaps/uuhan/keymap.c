@@ -40,6 +40,7 @@ enum {
 enum {
     CLICK = 0,
     SPACE,
+    QUOTE,
 };
 
 typedef struct {
@@ -55,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT( //  default layer
         KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSLS, KC_GRV,
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
-        CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_OTHER, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, LT(_MOUSE_R, KC_SCLN), KC_QUOT, MT(KC_RCTL, KC_ENT),
+        CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_OTHER, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, LT(_MOUSE_R, KC_SCLN), TD(QUOTE), MT(KC_RCTL, KC_ENT),
         OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, MT(KC_RGUI, KC_SLSH), MT(KC_RSFT, KC_ESC), TT(HHKB),
                             KC_LALT, LT(_MIRROR, KC_GRV), TD(SPACE), TT(_MIRROR), KC_RALT),
 
@@ -232,4 +233,5 @@ void space_reset (qk_tap_dance_state_t *state, void *user_data) {
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
+    [QUOTE] = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
 };
