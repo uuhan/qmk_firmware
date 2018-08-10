@@ -34,8 +34,11 @@ enum {
     QUOTE,
     SCLN,
     GRAVE,
+
     TDF5, TDF6, TDF7, TDF8,
     TDF9, TDF11, TDF12,
+
+    BSLASH,
 };
 
 typedef struct {
@@ -53,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
         CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(MOD_RCTL, KC_ENT),
         OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, MT(MOD_RGUI, KC_SLSH), MT(MOD_RSFT, KC_ESC), TT(HHKB),
-                            KC_LALT, TD(GRAVE), TD(SPACE), TT(MIRROR), KC_RALT),
+                            TD(BSLASH), TD(GRAVE), TD(SPACE), TT(MIRROR), KC_RALT),
 
     [HHKB] = LAYOUT(
         KC_GRV, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_INS, KC_DEL,
@@ -85,9 +88,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [SPACEFN] = LAYOUT(
         KC_BSLS, KC_EQL, KC_MINS, KC_0   , KC_9   , KC_8    , KC_7   , KC_P7  , KC_P8, KC_P9  , KC_PMNS, KC_PPLS, KC_TRNS, KC_TRNS, RESET,
-        GUI_T(KC_BSPC) , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE , KC_TAB, KC_BSPC, KC_P4, KC_P5  , KC_P6  , KC_PENT, KC_PAST, KC_PSLS, KC_TAB,
+        GUI_T(KC_BSPC) , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE , KC_TAB , KC_BSPC, KC_P4, KC_P5  , KC_P6  , KC_PENT, KC_PAST, KC_PSLS, KC_TAB,
         CTL_T(KC_ENT)  , KC_LPRN, KC_LEFT, KC_DOWN, KC_RIGHT, KC_PGUP, KC_HOME, KC_P1, KC_P2  , KC_P3  , KC_MINS, KC_EQL , KC_ENT,
-        F(0)           , KC_RPRN, KC_LCBR, KC_RCBR, KC_PGDN , KC_END , KC_DEL , KC_P0, KC_PEQL, KC_PDOT, KC_TRNS, KC_TRNS, KC_TRNS,
+        F(0)           , KC_RPRN, KC_LCBR, KC_RCBR, KC_PGDN , KC_DEL , KC_END , KC_P0, KC_PEQL, KC_PDOT, KC_TRNS, KC_TRNS, KC_TRNS,
                                 KC_RALT, KC_RGUI, KC_TRNS, KC_LGUI, KC_LALT),
 
     [FNKEYS] = LAYOUT(
@@ -371,6 +374,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TDF9]  = ACTION_TAP_DANCE_DOUBLE(KC_9   , KC_F9),
     [TDF11] = ACTION_TAP_DANCE_DOUBLE(KC_MINS, KC_F11),
     [TDF12] = ACTION_TAP_DANCE_DOUBLE(KC_EQL , KC_F12),
+
+    [BSLASH] = ACTION_TAP_DANCE_DOUBLE(KC_BSLS, KC_LALT),
 };
 
 LEADER_EXTERNS();
