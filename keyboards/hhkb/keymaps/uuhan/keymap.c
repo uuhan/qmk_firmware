@@ -5,15 +5,6 @@
 #include "mousekey.h"
 #include "process_keycode/process_tap_dance.h"
 
-// Layer names
-/* #define BASE 0 */
-/* #define HHKB 1 */
-/* #define MOUSEL 2 */
-/* #define MOUSER 3 */
-/* #define MIRROR 4 */
-/* #define SPACE 5 */
-/* #define OTHER 6 */
-
 extern keymap_config_t keymap_config;
 
 enum layers {
@@ -27,7 +18,7 @@ enum layers {
 };
 
 enum keycodes {
-    BASE = SAFE_RANGE,
+    BASE,
     HHKB,
     MOUSE_L,
     MOUSE_R,
@@ -36,26 +27,29 @@ enum keycodes {
     OTHER,
 };
 
+enum {
+    SINGLE_TAP = 1,
+    SINGLE_HOLD = 2,
+    DOUBLE_TAP = 3,
+    DOUBLE_HOLD = 4,
+    DOUBLE_SINGLE_TAP = 5,
+    TRIPLE_TAP = 6,
+    TRIPLE_HOLD = 7
+};
+
+enum {
+    CLICK = 0
+};
+
+typedef struct {
+    bool is_press_action;
+    int state;
+} xtap;
+
 // Required for leader function. Measured in ms
 // #define LEADER_TIMEOUT 300
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
-    /* BASE Level: Default Layer
-     |-----------+-------+--------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+------+----|
-     |     `     |  1    | 2      | 3     |   4   |   5   |   6   | 7     | 8     | 9     | 0     | -     | =     | Bksp |Lead|
-     |-----------+-------+--------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+------+----|
-     |    Tab    |  Q    | W      | E     |   R   |   T   |   Y   |  U    | I     | O     | P     | [     | ]     |      | \  |
-     |-----------+-------+--------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+------+----|
-     | Esc/Hyper |   A   | S      | D     |   F   |   G   |   H   |  J    | K     | L     |;/Media| '     | Enter |      |    |
-     |-----------+-------+--------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+------+----|
-     |   Shift   | Z/Ctl | X/Alt  | C/Gui |   V   |   B   |   N   |  M    | ,/Gui | ./Alt | //Ctl | Shift | Dev   |      |    |
-     |-----------+-------+--------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+------+----|
-     TODO: Maybe add a photoshop layer for when I need to hold spacebar down. Maybe just make it a layer that you
-                 |------+------+-----------------------+------+------|
-                 | Dev  |Mouse | ******* Space ******* | Dev  |Mouse |
-                 |------+------+-----------------------+------+------|
-    */
 
     [_BASE] = LAYOUT( //  default layer
         KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSLS, KC_GRV,
@@ -64,43 +58,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, MT(KC_RGUI, KC_SLSH), MT(KC_RSFT, KC_ESC), TT(HHKB),
         KC_LALT, LT(_MIRROR, KC_GRV), LT(_SPACEFN, KC_SPC), TT(_MIRROR), KC_RALT),
 
-    /* Layer HHKB: HHKB mode (HHKB Fn)
-      TODO: Add a cmd/tab function to the developer layer for quick switching between different applications when debugging
-      |------+-----+-----+-----+----+----+--------+----------------+--------------+-----------+-------------+-----+-------+-------+-----|
-      |      |     |     |     |    |    |        |                |              |           |             |     |       |       |     |
-      |------+-----+-----+-----+----+----+--------+----------------+--------------+-----------+-------------+-----+-------+-------+-----|
-      |      |     |     |     |    |    |        |                |              |           |             |     |       |       |     |
-      |------+-----+-----+-----+----+----+--------+----------------+--------------+-----------+-------------+-----+-------+-------+-----|
-      |      | F1  | F2  | F3  | F4 | F5 | Left   |  Down          | Up           | Right     |             |     |       |       |     |
-      |------+-----+-----+-----+----+----+--------+----------------+--------------+-----------+-------------+-----+-------+-------+-----|
-      |      |     |     |     |    |    |        |                |              |           |             |     |       |       |     |
-      |------+-----+-----+-----+----+----+--------+----------------+--------------+-----------+-------------+-----+-------+-------+-----|
-
-                 |------+------+----------------------+------+------+
-                 | **** | **** | ******************** | **** | **** |
-                 |------+------+----------------------+------+------+
-     */
-
     [_HHKB] = LAYOUT(
         KC_GRV, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_INS, KC_DEL,
         KC_CAPS, KC_F13, KC_F14, KC_F15, KC_F16, KC_F17, KC_F18, KC_F19, KC_PSCR, KC_SLCK, KC_PAUS, KC_UP, KC_TRNS, KC_BSPC,
         KC_LCTL, KC_VOLD, KC_VOLU, KC_MUTE, KC_NO, KC_NO, KC_PAST, KC_PSLS, KC_HOME, KC_PGUP, KC_LEFT, KC_RGHT, KC_ENT,
         KC_LSFT, KC_F20, KC_F21, KC_F22, KC_F23, KC_F24, KC_PPLS, KC_PMNS, KC_END, KC_PGDN, KC_DOWN, KC_RSFT, KC_TRNS,
-        KC_LALT, KC_LGUI, KC_LGUI, KC_RGUI, KC_RALT),
+                                KC_LALT, KC_LGUI, KC_LGUI, KC_RGUI, KC_RALT),
 
     [_MOUSE_L] = LAYOUT(
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TAB, KC_TRNS, KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI, KC_ESC, KC_HOME, KC_PGUP, KC_PGDN, KC_END, KC_TRNS, KC_TRNS, KC_BSPC,
-        KC_ACL0, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, KC_TRNS, KC_TRNS, KC_ENT,
-        KC_LSFT, KC_ACL0, KC_TRNS, KC_BTN3, KC_BTN2, KC_LALT, KC_WH_L, KC_WH_R, KC_ACL0, KC_ACL1, KC_ACL2, KC_TRNS, KC_TRNS,
-        KC_LGUI, KC_LALT, KC_BTN1, KC_RALT, KC_RGUI),
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_TAB , KC_TRNS, KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI, KC_ESC , KC_HOME, KC_PGUP, KC_PGDN , KC_END , KC_TRNS, KC_TRNS, KC_BSPC,
+        KC_ACL0, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL, KC_LEFT, KC_DOWN, KC_UP  , KC_RIGHT, KC_TRNS, KC_TRNS, KC_ENT,
+        KC_LSFT, KC_ACL0, KC_TRNS, KC_BTN3, KC_BTN2, KC_LALT, KC_WH_L, KC_WH_R, KC_ACL0, KC_ACL1 , KC_ACL2, KC_TRNS, KC_TRNS,
+                                KC_LGUI, KC_LALT, TD(CLICK), KC_RALT, KC_RGUI),
 
     [_MOUSE_R] = LAYOUT(
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_HOME, KC_PGUP, KC_PGDN, KC_END, KC_ESC, KC_RGUI, KC_WH_D, KC_MS_U, KC_WH_U, KC_ACL0, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_LCTL, KC_TRNS, KC_LEFT, KC_UP, KC_DOWN, KC_RIGHT, KC_RCTL, KC_MS_L, KC_MS_D, KC_MS_R, KC_TRNS, KC_ACL0, KC_ENT,
         KC_LSFT, KC_ACL0, KC_ACL1, KC_ACL2, KC_WH_L, KC_WH_R, KC_RALT, KC_BTN2, KC_BTN3, KC_TRNS, KC_TRNS, KC_RSFT, KC_TRNS,
-        KC_LGUI, KC_LALT, KC_BTN1, KC_TRNS, KC_TRNS),
+                                KC_LGUI, KC_LALT, TD(CLICK), KC_TRNS, KC_TRNS),
 
     [_MIRROR] = LAYOUT(
         KC_GRV, KC_BSLS, KC_EQL, KC_MINS, KC_0, KC_9, KC_8, KC_7, KC_6, KC_5, KC_4, KC_3, KC_2, KC_1, KC_ESC,
@@ -140,4 +117,91 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
         break;
     }
     return MACRO_NONE;
+};
+
+int cur_dance (qk_tap_dance_state_t *state) {
+  if (state->count == 1) {
+    if (state->interrupted || !state->pressed)  return SINGLE_TAP;
+    //key has not been interrupted, but they key is still held. Means you want to send a 'HOLD'.
+    else return SINGLE_HOLD;
+  }
+  else if (state->count == 2) {
+    /*
+     * DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
+     * action when hitting 'pp'. Suggested use case for this return value is when you want to send two
+     * keystrokes of the key, and not the 'double tap' action/macro.
+    */
+    if (state->interrupted) return DOUBLE_SINGLE_TAP;
+    else if (state->pressed) return DOUBLE_HOLD;
+    else return DOUBLE_TAP;
+  }
+  //Assumes no one is trying to type the same letter three times (at least not quickly).
+  //If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
+  //an exception here to return a 'TRIPLE_SINGLE_TAP', and define that enum just like 'DOUBLE_SINGLE_TAP'
+  if (state->count == 3) {
+    if (state->interrupted || !state->pressed)  return TRIPLE_TAP;
+    else return TRIPLE_HOLD;
+  }
+  else return 8; //magic number. At some point this method will expand to work for more presses
+}
+
+//instanalize an instance of 'tap' for the 'x' tap dance.
+static xtap xtap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+void click_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_state.state = cur_dance(state);
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        mousekey_on(KC_BTN1);
+        break;
+    case SINGLE_HOLD:
+        mousekey_on(KC_ACL0);
+        mousekey_send();
+        break;
+    case DOUBLE_TAP:
+        mousekey_on(KC_BTN2);
+        mousekey_send();
+        break;
+    case DOUBLE_HOLD:
+        mousekey_on(KC_BTN1);
+        mousekey_send();
+        break;
+    case DOUBLE_SINGLE_TAP:
+        mousekey_on(KC_BTN1);
+        mousekey_send();
+  }
+}
+
+void click_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        mousekey_send();
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+        break;
+    case SINGLE_HOLD:
+        mousekey_off(KC_ACL0);
+        mousekey_send();
+        break;
+    case DOUBLE_TAP:
+        mousekey_off(KC_BTN2);
+        mousekey_send();
+        break;
+    case DOUBLE_HOLD:
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+        break;
+    case DOUBLE_SINGLE_TAP:
+        mousekey_send();
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+  }
+  xtap_state.state = 0;
+}
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished, click_reset),
 };
