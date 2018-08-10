@@ -90,7 +90,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_BSLS, KC_EQL, KC_MINS, KC_0, KC_9, KC_8, KC_7, KC_P7, KC_P8, KC_P9, KC_PMNS, KC_PPLS, KC_TRNS, KC_TRNS, RESET,
         GUI_T(KC_BSPC) , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE , KC_BSLS, KC_BSPC, KC_P4, KC_P5  , KC_P6  , KC_PENT, KC_PAST, KC_PSLS, KC_TAB,
         CTL_T(KC_ENT)  , KC_LPRN, KC_LEFT, KC_DOWN, KC_RIGHT, KC_PGUP, KC_HOME, KC_P1, KC_P2  , KC_P3  , KC_MINS, KC_EQL , KC_ENT,
-        TT(KC_LSFT)    , KC_RPRN, KC_LCBR, KC_RCBR, KC_PGDN , KC_END , KC_DEL , KC_P0, KC_PEQL, KC_PDOT, KC_TRNS, KC_TRNS, KC_TRNS,
+        F(0)           , KC_RPRN, KC_LCBR, KC_RCBR, KC_PGDN , KC_END , KC_DEL , KC_P0, KC_PEQL, KC_PDOT, KC_TRNS, KC_TRNS, KC_TRNS,
                                 KC_RALT, KC_RGUI, KC_TRNS, KC_LGUI, KC_LALT),
 
     [_OTHER] = LAYOUT(
@@ -188,4 +188,8 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished, click_reset),
+};
+
+const uint16_t PROGMEM fn_actions[] = {
+    [0] = ACTION_MODS_TAP_TOGGLE(MOD_LSFT),
 };
