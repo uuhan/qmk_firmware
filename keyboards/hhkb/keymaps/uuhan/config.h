@@ -1,7 +1,7 @@
 // Based off of this section:
 // https://github.com/qmk/qmk_firmware/blob/master/doc/BUILD_GUIDE.md#the-configh-file
-#ifndef CONFIG_BLAKEDIETZ_H
-#define CONFIG_BLAKEDIETZ_H
+#ifndef CONFIG_UUHAN_H
+#define CONFIG_UUHAN_H
 
 // Bring in original defaults
 #include "../../config.h"
@@ -12,6 +12,11 @@
 #define MOUSEKEY_MAX_SPEED      3
 #define MOUSEKEY_TIME_TO_MAX    5
 #define MOUSEKEY_WHEEL_DELAY    0
+
+#ifdef TAPPING_TERM
+  #undef TAPPING_TERM
+  #define TAPPING_TERM 180
+#endif
 
 // Set up tapdance functionality
 //#define TAPPING_TOGGLE  1
