@@ -4,6 +4,7 @@
 #include "action.h"
 #include "mousekey.h"
 #include "process_keycode/process_tap_dance.h"
+#include "process_keycode/process_leader.h"
 
 extern keymap_config_t keymap_config;
 
@@ -18,7 +19,7 @@ enum layers {
 };
 
 enum keycodes {
-    BASE,
+    BASE = SAFE_RANGE,
     HHKB,
     MOUSE_L,
     MOUSE_R,
@@ -235,3 +236,32 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
     [QUOTE] = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
 };
+
+LEADER_EXTERNS();
+
+void matrix_scan_user(void) {
+    LEADER_DICTIONARY() {
+        leading = false;
+        leader_end();
+
+        // Firefox Keyshots
+        SEQ_ONE_KEY(KC_Q) {
+            SEND_STRING(SS_LALT(SS_LGUI("c")));
+        }
+        SEQ_ONE_KEY(KC_W) {
+            SEND_STRING(SS_LALT(SS_LGUI("k")));
+        }
+        SEQ_ONE_KEY(KC_E) {
+            SEND_STRING(SS_LALT(SS_LGUI("s")));
+        }
+        SEQ_ONE_KEY(KC_R) {
+            SEND_STRING(SS_LSFT(SS_TAP(X_F7)));
+        }
+        SEQ_ONE_KEY(KC_T) {
+            SEND_STRING(SS_LALT(SS_LGUI("e")));
+        }
+        SEQ_ONE_KEY(KC_ESC) {
+            SEND_STRING(SS_TAP(X_F12));
+        }
+    }
+}
