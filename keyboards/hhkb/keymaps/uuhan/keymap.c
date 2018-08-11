@@ -34,10 +34,13 @@ enum {
     QUOTE,
     SCLN,
     GRAVE,
-    LCTRL,
 
     TDF5, TDF6, TDF7,
-    TDF8, TDF9, TDF12,
+    TDF8, TDF9, TDF10,
+    TDF12,
+
+    MINS,
+    PIPE,
 };
 
 typedef struct {
@@ -51,9 +54,9 @@ typedef struct {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [BASE] = LAYOUT( //  default layer
-        KC_ESC, KC_1, KC_2, KC_3, KC_4, TD(TDF5), TD(TDF6), TD(TDF7), TD(TDF8), TD(TDF9), KC_0, KC_MINS, TD(TDF12), KC_BSLS, KC_LEAD,
+        KC_ESC, KC_1 , KC_2, KC_3, KC_4, TD(TDF5), TD(TDF6), TD(TDF7), TD(TDF8), TD(TDF9), TD(TDF10), TD(MINS), TD(TDF12), TD(PIPE), KC_LEAD,
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
-        TD(LCTRL)    , LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(MOD_RCTL, KC_ENT),
+        CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(MOD_RCTL, KC_ENT),
         OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, MT(MOD_RGUI, KC_SLSH), MT(MOD_RSFT, KC_ESC), TT(HHKB),
                             KC_LALT, TD(GRAVE), TD(SPACE), TT(MIRROR), KC_RALT),
 
@@ -359,55 +362,11 @@ void quote_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_state.state = 0;
 }
 
-void ctrl_finished (qk_tap_dance_state_t *state, void *user_data) {
-  xtap_state.state = cur_dance(state);
-  switch (xtap_state.state) {
-    case SINGLE_TAP:
-        register_code(KC_ESC);
-        break;
-    case SINGLE_HOLD:
-        register_code(KC_LCTL);
-        break;
-    case DOUBLE_TAP:
-        register_code(KC_ENT);
-        break;
-    case DOUBLE_HOLD:
-        register_code(KC_LGUI);
-        break;
-    case DOUBLE_SINGLE_TAP:
-        register_code(KC_ESC);
-        unregister_code(KC_ESC);
-        register_code(KC_ESC);
-  }
-}
-
-void ctrl_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_state.state) {
-    case SINGLE_TAP:
-        unregister_code(KC_ESC);
-        break;
-    case SINGLE_HOLD:
-        unregister_code(KC_LCTL);
-        break;
-    case DOUBLE_TAP:
-        del_weak_mods(KC_LSFT);
-        unregister_code(KC_ENT);
-        break;
-    case DOUBLE_HOLD:
-        unregister_code(KC_LGUI);
-        break;
-    case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_ESC);
-  }
-  xtap_state.state = 0;
-}
-
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
     [QUOTE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,quote_finished,quote_reset),
     [SCLN]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
-    [LCTRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,ctrl_finished,ctrl_reset),
     [GRAVE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,grave_finished,grave_reset),
 
     [TDF5]  = ACTION_TAP_DANCE_DOUBLE(KC_5   , KC_F5),
@@ -415,7 +374,11 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TDF7]  = ACTION_TAP_DANCE_DOUBLE(KC_7   , KC_F7),
     [TDF8]  = ACTION_TAP_DANCE_DOUBLE(KC_8   , KC_F8),
     [TDF9]  = ACTION_TAP_DANCE_DOUBLE(KC_9   , KC_F9),
+    [TDF10] = ACTION_TAP_DANCE_DOUBLE(KC_0   , KC_F10),
     [TDF12] = ACTION_TAP_DANCE_DOUBLE(KC_EQL , KC_F12),
+
+    [MINS]  = ACTION_TAP_DANCE_DOUBLE(KC_MINS, KC_UNDS),
+    [PIPE]  = ACTION_TAP_DANCE_DOUBLE(KC_BSLS, KC_PIPE),
 };
 
 LEADER_EXTERNS();
