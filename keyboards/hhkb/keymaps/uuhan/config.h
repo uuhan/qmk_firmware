@@ -17,7 +17,7 @@
 
 #ifdef TAPPING_TERM
   #undef TAPPING_TERM
-  #define TAPPING_TERM 210
+  #define TAPPING_TERM 180
 #endif
 
 // Disable MACRO support to shrink size
@@ -37,6 +37,6 @@
 // When you hold a dual function key, and haven't pressed anything when you release the key,
 // normally nothing happens. However, if you enable this, if you release the key without pressing another key,
 // it will send the original key, even if it is outside of the tapping term.
-#define RETRO_TAPPING
+// #define RETRO_TAPPING;
 
 #endif
