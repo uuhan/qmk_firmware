@@ -25,7 +25,8 @@ extern keymap_config_t keymap_config;
 
 enum layers {
   _QWERTY,
-  _MOUSE,
+  _MOUSE_L,
+  _MOUSE_R,
   _SPACEFN,
   _FNKEYS,
   _DVORAK,
@@ -61,7 +62,7 @@ enum {
 //Tap dance enums
 enum {
     CLICK = 0,
-    TD_SCLN_QUOT,
+    TD_SCLN,
 };
 
 typedef struct {
@@ -84,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_QWERTY] = LAYOUT_planck_mit(
   ALT_T(KC_TAB), KC_Q            , KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-  CTL_T(KC_ESC), LT(_MOUSE, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN_QUOT), MT(MOD_RCTL, KC_ENT),
+  CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
   OSM(MOD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, MT(MOD_RSFT, KC_QUOT),
   KC_LALT      , KC_LGUI         , KC_LGUI, GUI_T(KC_GRV), LT(_RAISE, KC_ENT), LT(_SPACEFN, KC_SPC), LT(_LOWER, KC_BSPC),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
@@ -100,11 +101,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Ctrl | Alt  | GUI  |Brite |Lower |    Space    |Raise | Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
-[_MOUSE] = LAYOUT_planck_mit(
-  KC_TAB , KC_Q   , KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI   , KC_Y   , KC_U   , KC_I   , KC_O  , KC_P   , KC_BSPC,
-  KC_LCTL, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL   , KC_H   , KC_J   , KC_K   , KC_L  , KC_ACL0, KC_ACL1,
-  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_LALT   , KC_N   , KC_M   , KC_COMM, KC_DOT, KC_SLSH, KC_ENT ,
-  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, KC_BTN2, TD(CLICK), KC_BTN3, KC_LEFT, KC_DOWN, KC_UP , KC_RGHT
+[_MOUSE_L] = LAYOUT_planck_mit(
+  KC_TAB , KC_Q   , KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
+  KC_LCTL, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL  , KC_H   , KC_J   , KC_K   , KC_L   , KC_ACL0, KC_ACL1,
+  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_LALT  , KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_ENT ,
+  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, KC_BTN2, TD(CLICK), KC_BTN3, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT
+),
+
+[_MOUSE_R] = LAYOUT_planck_mit(
+  KC_TAB , KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC   , KC_RGUI, KC_WH_U, KC_MS_U   , KC_WH_D, KC_P   , KC_BSPC,
+  KC_TRNS, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL   , KC_RCTL, KC_MS_L, KC_MS_D   , KC_MS_R, KC_TRNS, KC_TRNS,
+  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_LALT   , KC_RALT, KC_M   , KC_COMM   , KC_DOT , KC_SLSH, KC_ENT ,
+  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, KC_BTN3, TD(CLICK) , KC_BTN2, KC_LEFT, KC_DOWN   , KC_UP  , KC_RGHT
 ),
 
 /* Colemak
@@ -359,14 +367,19 @@ int cur_dance (qk_tap_dance_state_t *state) {
 }
 
 //instanalize an instance of 'tap' for the 'x' tap dance.
-static xtap xtap_state = {
+static xtap xtap_cick_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+static xtap xtap_scln_state = {
   .is_press_action = true,
   .state = 0
 };
 
 void click_finished (qk_tap_dance_state_t *state, void *user_data) {
-  xtap_state.state = cur_dance(state);
-  switch (xtap_state.state) {
+  xtap_cick_state.state = cur_dance(state);
+  switch (xtap_cick_state.state) {
     case SINGLE_TAP:
         mousekey_on(KC_BTN1);
         break;
@@ -389,7 +402,7 @@ void click_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void click_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_state.state) {
+  switch (xtap_cick_state.state) {
     case SINGLE_TAP:
         mousekey_send();
         mousekey_off(KC_BTN1);
@@ -412,10 +425,54 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
         mousekey_off(KC_BTN1);
         mousekey_send();
   }
-  xtap_state.state = 0;
+  xtap_cick_state.state = 0;
+}
+
+void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_scln_state.state = cur_dance(state);
+  switch (xtap_scln_state.state) {
+    case SINGLE_TAP:
+        register_code(KC_SCLN);
+        break;
+    case SINGLE_HOLD:
+        layer_on(_MOUSE_R);
+        break;
+    case DOUBLE_TAP:
+        add_weak_mods(MOD_LSFT);
+        register_code(KC_SCLN);
+        break;
+    case DOUBLE_HOLD:
+        register_code(KC_RALT);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        register_code(KC_SCLN);
+        unregister_code(KC_SCLN);
+        register_code(KC_SCLN);
+  }
+}
+
+void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_scln_state.state) {
+    case SINGLE_TAP:
+        unregister_code(KC_SCLN);
+        break;
+    case SINGLE_HOLD:
+        layer_off(_MOUSE_R);
+        break;
+    case DOUBLE_TAP:
+        del_weak_mods(MOD_LSFT);
+        unregister_code(KC_SCLN);
+        break;
+    case DOUBLE_HOLD:
+        unregister_code(KC_RALT);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        unregister_code(KC_SCLN);
+  }
+  xtap_scln_state.state = 0;
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [CLICK]        = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished, click_reset),
-    [TD_SCLN_QUOT] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_COLN),
+    [CLICK]   = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
+    [TD_SCLN] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
 };
