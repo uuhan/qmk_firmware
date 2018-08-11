@@ -64,7 +64,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_INS, KC_DEL,
         KC_CAPS, KC_F13, KC_F14, KC_F15, KC_F16, KC_F17, KC_F18, KC_F19, KC_PSCR, KC_SLCK, KC_PAUS, KC_UP, KC_TRNS, KC_BSPC,
         KC_LCTL, KC_VOLD, KC_VOLU, KC_MUTE, KC_NO, KC_NO, KC_PAST, KC_PSLS, KC_HOME, KC_PGUP, KC_LEFT, KC_RGHT, KC_ENT,
-        KC_LSFT, KC_F20, KC_F21, KC_F22, KC_F23, KC_F24, KC_PPLS, KC_PMNS, KC_END, KC_PGDN, KC_DOWN, KC_RSFT, KC_TRNS,
+        RESET  , KC_F20, KC_F21, KC_F22, KC_F23, KC_F24, KC_PPLS, KC_PMNS, KC_END, KC_PGDN, KC_DOWN, KC_RSFT, KC_TRNS,
                                 KC_LALT, KC_LGUI, KC_LGUI, KC_RGUI, KC_RALT),
 
     [MOUSE_L] = LAYOUT(
@@ -134,9 +134,19 @@ static xtap xtap_state = {
   .state = 0
 };
 
+static xtap xtap_click_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+static xtap xtap_space_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
 void click_finished (qk_tap_dance_state_t *state, void *user_data) {
-  xtap_state.state = cur_dance(state);
-  switch (xtap_state.state) {
+  xtap_click_state.state = cur_dance(state);
+  switch (xtap_click_state.state) {
     case SINGLE_TAP:
         mousekey_on(KC_BTN1);
         break;
@@ -160,7 +170,7 @@ void click_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void click_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_state.state) {
+  switch (xtap_click_state.state) {
     case SINGLE_TAP:
         mousekey_send();
         mousekey_off(KC_BTN1);
@@ -185,12 +195,12 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
         mousekey_off(KC_BTN1);
         mousekey_send();
   }
-  xtap_state.state = 0;
+  xtap_click_state.state = 0;
 }
 
 void space_finished (qk_tap_dance_state_t *state, void *user_data) {
-  xtap_state.state = cur_dance(state);
-  switch (xtap_state.state) {
+  xtap_space_state.state = cur_dance(state);
+  switch (xtap_space_state.state) {
     case SINGLE_TAP:
         register_code(KC_SPC);
         break;
@@ -211,7 +221,7 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void space_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_state.state) {
+  switch (xtap_space_state.state) {
     case SINGLE_TAP:
         unregister_code(KC_SPC);
         break;
@@ -227,7 +237,7 @@ void space_reset (qk_tap_dance_state_t *state, void *user_data) {
     case DOUBLE_SINGLE_TAP:
         unregister_code(KC_SPC);
   }
-  xtap_state.state = 0;
+  xtap_space_state.state = 0;
 }
 
 void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
