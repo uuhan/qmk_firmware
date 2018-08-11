@@ -34,13 +34,6 @@ enum {
     QUOTE,
     SCLN,
     GRAVE,
-
-    TDF5, TDF6, TDF7,
-    TDF8, TDF9, TDF10,
-    TDF12,
-
-    MINS,
-    PIPE,
 };
 
 typedef struct {
@@ -54,7 +47,7 @@ typedef struct {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [BASE] = LAYOUT( //  default layer
-        KC_ESC, KC_1 , KC_2, KC_3, KC_4, TD(TDF5), TD(TDF6), TD(TDF7), TD(TDF8), TD(TDF9), TD(TDF10), TD(MINS), TD(TDF12), TD(PIPE), KC_LEAD,
+        KC_ESC, KC_1 , KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSLS, KC_LEAD,
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
         CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(MOD_RCTL, KC_ENT),
         OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, MT(MOD_RGUI, KC_SLSH), MT(MOD_RSFT, KC_ESC), TT(HHKB),
@@ -378,17 +371,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [QUOTE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,quote_finished,quote_reset),
     [SCLN]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
     [GRAVE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,grave_finished,grave_reset),
-
-    [TDF5]  = ACTION_TAP_DANCE_DOUBLE(KC_5   , KC_F5),
-    [TDF6]  = ACTION_TAP_DANCE_DOUBLE(KC_6   , KC_F6),
-    [TDF7]  = ACTION_TAP_DANCE_DOUBLE(KC_7   , KC_F7),
-    [TDF8]  = ACTION_TAP_DANCE_DOUBLE(KC_8   , KC_F8),
-    [TDF9]  = ACTION_TAP_DANCE_DOUBLE(KC_9   , KC_F9),
-    [TDF10] = ACTION_TAP_DANCE_DOUBLE(KC_0   , KC_F10),
-    [TDF12] = ACTION_TAP_DANCE_DOUBLE(KC_EQL , KC_F12),
-
-    [MINS]  = ACTION_TAP_DANCE_DOUBLE(KC_MINS, KC_UNDS),
-    [PIPE]  = ACTION_TAP_DANCE_DOUBLE(KC_BSLS, KC_PIPE),
 };
 
 LEADER_EXTERNS();
