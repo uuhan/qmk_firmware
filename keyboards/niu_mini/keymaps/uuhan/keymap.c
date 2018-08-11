@@ -117,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_SPACEFN] = LAYOUT_planck_mit(
-  KC_BSLS, KC_EQL , KC_MINS, KC_UP  , KC_PIPE, KC_TAB, KC_J , KC_L   , KC_U   , KC_Y  , KC_SCLN, RESET,
+  KC_BSLS, KC_EQL , KC_MINS, KC_UP  , KC_PIPE, KC_TAB, KC_J , KC_L   , KC_U   , KC_Y  , KC_SCLN, KC_TRNS,
   KC_ENT , KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_D  , KC_H , KC_N   , KC_E   , KC_I  , KC_O   , KC_QUOT,
   KC_LSFT, KC_RPRN, KC_LCBR, KC_RCBR, KC_V   , KC_B  , KC_K , KC_M   , KC_COMM, KC_DOT, KC_SLSH, KC_ENT ,
   KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, RAISE  , KC_SPC, LOWER, KC_LEFT, KC_DOWN, KC_UP , KC_RGHT
@@ -153,9 +153,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT_planck_mit(
-  KC_0   , KC_1,    KC_2,    KC_3,    KC_4,   KC_5,   KC_6,   KC_7,   KC_8,   KC_9,   KC_0,          KC_BSPC,
-  KC_DEL , KC_4,    KC_5,    KC_6,    _______, _______, _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC,  KC_GRV,
-  _______, KC_7,    KC_8,    KC_9,    _______, _______, _______, _______, KC_LT ,  KC_GT  , KC_BSLS, _______,
+  KC_ESC , KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_MINS, KC_EQL ,  KC_BSLS, KC_GRV ,  KC_BSPC,
+  KC_ENT , KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, KC_MINS, KC_EQL ,  KC_LBRC, KC_RBRC,  KC_GRV,
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_LT  ,  KC_GT  , KC_BSLS, _______,
   _______, _______, _______, _______, _______,     _______,      LOWER, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
