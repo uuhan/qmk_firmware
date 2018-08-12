@@ -172,7 +172,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT_planck_mit(
   KC_ESC , KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7   , KC_8  ,  KC_9   , KC_0   ,  KC_DEL,
   KC_ENT , KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC,  KC_TILD,
-  _______, KC_MINS, KC_EQL , KC_BSLS, KC_GRV,  KC_BSPC, _______, _______, KC_LT ,  KC_GT  , KC_BSLS, _______,
+  F(0)   , KC_MINS, KC_EQL , KC_BSLS, KC_GRV,  KC_BSPC, _______, _______, KC_LT ,  KC_GT  , KC_BSLS, _______,
   _______, _______, _______, _______, _______,     _______,      LOWER, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
@@ -475,4 +475,8 @@ void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK]   = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [TD_SCLN] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
+};
+
+const uint16_t PROGMEM fn_actions[] = {
+    [0] = ACTION_MODS_TAP_TOGGLE(MOD_LSFT),
 };

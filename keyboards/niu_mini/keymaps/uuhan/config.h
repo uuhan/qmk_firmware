@@ -14,6 +14,8 @@
 
 #define TAPPING_TERM 190
 
+#define LEADER_TIMEOUT 800
+
 /*
  * MIDI options
  */
@@ -26,6 +28,16 @@
 */
 
 #define MIDI_BASIC
+
+#define IGNORE_MOD_TAP_INTERRUPT
+
+#define TAPPING_TOGGLE 1
+#define PERMISSIVE_HOLD
+
+// When you hold a dual function key, and haven't pressed anything when you release the key,
+// normally nothing happens. However, if you enable this, if you release the key without pressing another key,
+// it will send the original key, even if it is outside of the tapping term.
+#define RETRO_TAPPING
 
 /* enable advanced MIDI features:
    - MIDI notes can be added to the keymap
