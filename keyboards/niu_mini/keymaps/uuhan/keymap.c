@@ -135,10 +135,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_FNKEYS] = LAYOUT_planck_mit(
-  KC_BSLS, KC_EQL , KC_MINS, KC_HOME, KC_PGUP, KC_PGDN, KC_END, KC_L   , KC_U   , KC_Y  , KC_SCLN, KC_TRNS,
-  KC_ENT , KC_LPRN, _______, KC_BSPC, KC_DEL , KC_D   , KC_H  , KC_N   , KC_E   , KC_I  , KC_O   , KC_QUOT,
-  KC_LSFT, KC_RPRN, KC_LCBR, KC_RCBR, KC_V   , KC_B   , KC_K  , KC_M   , KC_COMM, KC_DOT, KC_SLSH, KC_ENT ,
-  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, KC_ENT , KC_ENT , KC_TAB, KC_LEFT, KC_DOWN, KC_UP , KC_RGHT
+  KC_BSLS, KC_EQL , KC_MINS, KC_HOME, KC_PGUP, KC_PGDN, KC_END , _______, _______, _______, _______, _______,
+  KC_ENT , KC_LPRN, _______, KC_BSPC, KC_DEL , _______, _______, _______, _______, _______, _______, _______,
+  KC_LSFT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+  _______, _______, _______, _______, KC_ENT ,      KC_ENT     , KC_TAB , _______, _______, _______, _______
 ),
 
 /* Dvorak
