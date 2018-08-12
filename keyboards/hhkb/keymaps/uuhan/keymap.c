@@ -89,11 +89,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                 KC_RALT, KC_RGUI, KC_TRNS, KC_LGUI, KC_LALT),
 
     [FNKEYS] = LAYOUT(
-        KC_TRNS, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12 , KC_PIPE, KC_TILD,
-        KC_TAB , KC_F7, KC_TRNS, KC_HOME, KC_PGUP, KC_PGDN, KC_END , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_LCBR, KC_RCBR, KC_BSPC,
-        KC_LCTL, KC_F8, KC_TRNS, KC_BSPC, KC_DEL , KC_UNDS, KC_PLUS, KC_MPRV, KC_MNXT, KC_MUTE, KC_COLN, KC_DQUO, KC_ENT,
+        KC_TRNS, KC_F1, KC_F2  , KC_F3  , KC_F4  , KC_F5  , KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 , KC_F12 , KC_PIPE, KC_TILD,
+        KC_TAB , KC_F7, KC_TRNS, KC_HOME, KC_PGUP, KC_PGDN, KC_END , KC_MINS, KC_EQL , KC_BSLS, KC_GRV , KC_LCBR, KC_RCBR, KC_BSPC,
+        KC_LCTL, KC_F8, KC_TRNS, KC_BSPC, KC_DEL , KC_TAB , KC_TRNS, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, KC_DQUO, KC_ENT,
         KC_LSFT, KC_F9, KC_F10, KC_F11  , KC_F12 , KC_F13 , KC_F14 , KC_F15 , KC_LT  , KC_GT  , KC_QUES, KC_RSFT, KC_TRNS,
-                                KC_LGUI, KC_LALT, KC_ENT, KC_RGUI, KC_RALT)};
+                                KC_LGUI , KC_LALT, KC_ENT , KC_RGUI, KC_RALT)};
 
 int cur_dance (qk_tap_dance_state_t *state) {
   if (state->count == 1) {
