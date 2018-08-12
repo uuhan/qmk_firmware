@@ -64,6 +64,7 @@ enum {
     CLICK = 0,
     TD_SCLN,
     TD_SLSH,
+    TD_QUOT,
 };
 
 typedef struct {
@@ -129,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_SPACEFN] = LAYOUT_planck_mit(
   KC_BSPC, KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , KC_GRV , KC_L   , KC_U   , KC_Y  , KC_SCLN, KC_TRNS,
-  KC_ENT , KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_MINS, KC_EQL , KC_LEFT, KC_DOWN, KC_UP , KC_RGHT, KC_QUOT,
+  KC_ENT , KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_MINS, KC_EQL , KC_LEFT, KC_DOWN, KC_UP , KC_RGHT, TD(TD_QUOT),
   KC_LSFT, KC_RPRN, KC_LCBR, KC_RCBR, KC_BSLS, KC_UNDS, KC_PLUS, KC_M   , KC_COMM, KC_DOT, KC_SLSH, KC_ENT ,
   KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER  , KC_SPC , RAISE, KC_LEFT, KC_DOWN, KC_UP , KC_RGHT
 ),
@@ -528,6 +529,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK]   = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [TD_SCLN] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
     [TD_SLSH] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,slsh_finished,slsh_reset),
+    [TD_QUOT] = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
 };
 
 const uint16_t PROGMEM fn_actions[] = {
