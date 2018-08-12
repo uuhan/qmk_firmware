@@ -35,6 +35,7 @@ enum {
     SCLN,
     GRAVE,
     SLSH,
+    PIPE,
 };
 
 typedef struct {
@@ -84,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [SPACEFN] = LAYOUT(
         KC_BSLS, KC_EQL, KC_MINS, KC_0   , KC_9   , KC_8    , KC_7   , KC_P7  , KC_P8, KC_P9  , KC_PAST, KC_PMNS, KC_PPLS, KC_PSLS, RESET,
-        GUI_T(KC_BSPC) , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE , KC_TAB , KC_BSPC, KC_P4, KC_P5  , KC_P6  , KC_PEQL, KC_LCBR, KC_RCBR, KC_TAB,
+        GUI_T(KC_BSPC) , KC_LBRC, KC_RBRC, KC_UP  , TD(PIPE), KC_TAB , KC_BSPC, KC_P4, KC_P5  , KC_P6  , KC_PEQL, KC_LCBR, KC_RCBR, KC_TAB,
         CTL_T(KC_ENT)  , KC_LPRN, KC_LEFT, KC_DOWN, KC_RIGHT, KC_MINS, KC_EQL , KC_P1, KC_P2  , KC_P3  , KC_COLN, KC_DQUO, KC_PENT,
         F(0)           , KC_RPRN, KC_LCBR, KC_RCBR, KC_BSLS , KC_DEL , KC_GRV , KC_P0, KC_LT  , KC_GT  , KC_QUES, KC_PDOT, KC_TRNS,
                                 KC_RALT, KC_RGUI, KC_TRNS, KC_LGUI, KC_LALT),
@@ -422,6 +423,19 @@ void slsh_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_slsh_state.state = 0;
 }
 
+void pipe_dance(qk_tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1:
+            SEND_STRING("|");
+            reset_tap_dance(state);
+            break;
+        case 2:
+            SEND_STRING("\\");
+            reset_tap_dance(state);
+            break;
+    }
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
@@ -429,6 +443,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [SCLN]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
     [GRAVE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,grave_finished,grave_reset),
     [SLSH]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,slsh_finished,slsh_reset),
+    [PIPE]  = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, pipe_dance, NULL, 200),
 };
 
 LEADER_EXTERNS();
