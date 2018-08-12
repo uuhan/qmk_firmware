@@ -88,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ALT_T(KC_TAB), KC_Q            , KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
   CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
   OSM(MOD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  TD(TD_SLSH), MT(MOD_RSFT, KC_QUOT),
-  KC_LALT      , KC_LGUI         , KC_LGUI, GUI_T(KC_GRV), LT(_RAISE, KC_TAB), LT(_SPACEFN, KC_SPC), LT(_LOWER, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+  KC_LALT      , KC_LGUI         , KC_LGUI, GUI_T(KC_GRV), LT(_LOWER, KC_TAB), LT(_SPACEFN, KC_SPC), LT(_RAISE, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
 /* Mouse
@@ -170,10 +170,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |   0  |      |             |      | Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
-[_RAISE] = LAYOUT_planck_mit(
+[_LOWER] = LAYOUT_planck_mit(
   ALT_T(KC_ESC), KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7   , KC_8   ,  KC_9   , KC_0   ,  KC_DEL,
-  GUI_T(KC_ENT), KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, KC_UNDS, KC_PLUS,  KC_LBRC, KC_RBRC,  KC_TILD,
-  F(0)         , KC_MINS, KC_EQL , KC_BSLS, KC_GRV,  KC_BSPC, _______, _______, KC_LT  ,  KC_GT  , KC_BSLS, _______,
+  GUI_T(KC_ENT), KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, KC_MINS, KC_EQL ,  KC_LBRC, KC_RBRC,  KC_GRV,
+  F(0)         , KC_MINS, KC_EQL , KC_BSLS, KC_GRV,  KC_BSPC, _______, _______, _______,  _______, KC_BSLS, _______,
   _______, _______, _______, _______, _______,     _______,     LOWER, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
@@ -188,10 +188,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
-[_LOWER] = LAYOUT_planck_mit(
-  _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,  KC_DEL,
-  KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL , KC_LCBR, KC_RCBR, KC_TILD,
-  _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, KC_PIPE, _______,
+[_RAISE] = LAYOUT_planck_mit(
+  _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,
+  KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_TILD,
+  _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, KC_LT  , KC_GT  , KC_PIPE, KC_DQUO,
   _______, _______, _______, _______, RAISE,     _______,      _______, KC_HOME, KC_PGDN, KC_PGUP,  KC_END
 ),
 
