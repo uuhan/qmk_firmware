@@ -378,6 +378,11 @@ static xtap xtap_scln_state = {
   .state = 0
 };
 
+static xtap xtap_slsh_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
 void click_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_cick_state.state = cur_dance(state);
   switch (xtap_cick_state.state) {
@@ -473,10 +478,56 @@ void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_scln_state.state = 0;
 }
 
+void slsh_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_slsh_state.state = cur_dance(state);
+  switch (xtap_slsh_state.state) {
+    case SINGLE_TAP:
+        register_code(KC_SLSH);
+        break;
+    case SINGLE_HOLD:
+        register_code(KC_RGUI);
+        break;
+    case DOUBLE_TAP:
+        add_weak_mods(MOD_LSFT);
+        register_code(KC_SLSH);
+        break;
+    case DOUBLE_HOLD:
+        register_code(KC_RSFT);
+        register_code(KC_RGUI);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        register_code(KC_SLSH);
+        unregister_code(KC_SLSH);
+        register_code(KC_SLSH);
+  }
+}
+
+void slsh_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_slsh_state.state) {
+    case SINGLE_TAP:
+        unregister_code(KC_SLSH);
+        break;
+    case SINGLE_HOLD:
+        unregister_code(KC_RGUI);
+        break;
+    case DOUBLE_TAP:
+        del_weak_mods(MOD_LSFT);
+        unregister_code(KC_SLSH);
+        break;
+    case DOUBLE_HOLD:
+        unregister_code(KC_RSFT);
+        unregister_code(KC_RGUI);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        unregister_code(KC_SLSH);
+  }
+  xtap_slsh_state.state = 0;
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK]   = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [TD_SCLN] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
-    [TD_SLSH] = ACTION_TAP_DANCE_DOUBLE(KC_SLSH, KC_QUES),
+    [TD_SLSH] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,slsh_finished,slsh_reset),
 };
 
 const uint16_t PROGMEM fn_actions[] = {
