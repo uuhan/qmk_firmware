@@ -127,6 +127,11 @@ static xtap xtap_state = {
   .state = 0
 };
 
+static xtap xtap_scln_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
 static xtap xtap_click_state = {
   .is_press_action = true,
   .state = 0
@@ -234,8 +239,8 @@ void space_reset (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
-  xtap_state.state = cur_dance(state);
-  switch (xtap_state.state) {
+  xtap_scln_state.state = cur_dance(state);
+  switch (xtap_scln_state.state) {
     case SINGLE_TAP:
         register_code(KC_SCLN);
         break;
@@ -257,7 +262,7 @@ void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_state.state) {
+  switch (xtap_scln_state.state) {
     case SINGLE_TAP:
         unregister_code(KC_SCLN);
         break;
@@ -274,7 +279,7 @@ void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
     case DOUBLE_SINGLE_TAP:
         unregister_code(KC_SCLN);
   }
-  xtap_state.state = 0;
+  xtap_scln_state.state = 0;
 }
 
 void grave_finished (qk_tap_dance_state_t *state, void *user_data) {
