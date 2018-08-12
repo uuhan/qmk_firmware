@@ -63,6 +63,7 @@ enum {
 enum {
     CLICK = 0,
     TD_SCLN,
+    TD_SLSH,
 };
 
 typedef struct {
@@ -86,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_planck_mit(
   ALT_T(KC_TAB), KC_Q            , KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
   CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
-  OSM(MOD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, MT(MOD_RSFT, KC_QUOT),
+  OSM(MOD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  TD(TD_SLSH), MT(MOD_RSFT, KC_QUOT),
   KC_LALT      , KC_LGUI         , KC_LGUI, GUI_T(KC_GRV), LT(_RAISE, KC_TAB), LT(_SPACEFN, KC_SPC), LT(_LOWER, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
@@ -475,6 +476,7 @@ void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK]   = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [TD_SCLN] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
+    [TD_SLSH] = ACTION_TAP_DANCE_DOUBLE(KC_SLSH, KC_QUES),
 };
 
 const uint16_t PROGMEM fn_actions[] = {
