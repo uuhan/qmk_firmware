@@ -34,6 +34,7 @@ enum {
     QUOTE,
     SCLN,
     GRAVE,
+    SLSH,
 };
 
 typedef struct {
@@ -50,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC, KC_1 , KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSLS, KC_LEAD,
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
         CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(MOD_RCTL, KC_ENT),
-        OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, MT(MOD_RGUI, KC_SLSH), MT(MOD_RSFT, KC_ESC), TT(HHKB),
+        OSM(MOD_LSFT), GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, TD(SLSH), MT(MOD_RSFT, KC_ESC), TT(HHKB),
                         ALT_T(KC_BSLS), TD(GRAVE), TD(SPACE), TT(MIRROR), KC_RALT),
 
     [HHKB] = LAYOUT(
@@ -138,6 +139,11 @@ static xtap xtap_click_state = {
 };
 
 static xtap xtap_space_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+static xtap xtap_slsh_state = {
   .is_press_action = true,
   .state = 0
 };
@@ -370,12 +376,59 @@ void quote_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_state.state = 0;
 }
 
+void slsh_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_slsh_state.state = cur_dance(state);
+  switch (xtap_slsh_state.state) {
+    case SINGLE_TAP:
+        register_code(KC_SLSH);
+        break;
+    case SINGLE_HOLD:
+        register_code(KC_RGUI);
+        break;
+    case DOUBLE_TAP:
+        add_weak_mods(MOD_LSFT);
+        register_code(KC_SLSH);
+        break;
+    case DOUBLE_HOLD:
+        register_code(KC_RSFT);
+        register_code(KC_RGUI);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        register_code(KC_SLSH);
+        unregister_code(KC_SLSH);
+        register_code(KC_SLSH);
+  }
+}
+
+void slsh_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_slsh_state.state) {
+    case SINGLE_TAP:
+        unregister_code(KC_SLSH);
+        break;
+    case SINGLE_HOLD:
+        unregister_code(KC_RGUI);
+        break;
+    case DOUBLE_TAP:
+        del_weak_mods(KC_LSFT);
+        unregister_code(KC_SLSH);
+        break;
+    case DOUBLE_HOLD:
+        unregister_code(KC_RSFT);
+        unregister_code(KC_RGUI);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        unregister_code(KC_SLSH);
+  }
+  xtap_slsh_state.state = 0;
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
     [QUOTE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,quote_finished,quote_reset),
     [SCLN]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
     [GRAVE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,grave_finished,grave_reset),
+    [SLSH]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,slsh_finished,slsh_reset),
 };
 
 LEADER_EXTERNS();
