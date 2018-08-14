@@ -443,11 +443,12 @@ void lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_LSFT);
         break;
     case DOUBLE_TAP:
-        if (!xtap_lsft_state.is_keeping) {
+        if (xtap_lsft_state.is_keeping) {
+            xtap_lsft_state.is_keeping = false;
+            unregister_code(KC_LSFT);
+        } else {
             xtap_lsft_state.is_keeping = true;
             register_code(KC_LSFT);
-        } else {
-            unregister_code(KC_LSFT);
         }
         break;
     case DOUBLE_HOLD:
