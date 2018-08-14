@@ -42,7 +42,7 @@ enum {
 typedef struct {
     bool is_press_action;
     bool is_keeping;
-    uint16_t timestamp;
+    // uint16_t timestamp;
     int state;
 } xtap;
 
@@ -436,7 +436,7 @@ void lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_lsft_state.state = cur_dance(state);
   switch (xtap_lsft_state.state) {
     case SINGLE_TAP:
-        xtap_lsft_state.timestamp = state->timer;
+        // xtap_lsft_state.timestamp = state->timer;
         register_code(KC_LSFT);
         break;
     case SINGLE_HOLD:
