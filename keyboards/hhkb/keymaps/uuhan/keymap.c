@@ -455,9 +455,9 @@ void lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_LSFT);
         break;
     case DOUBLE_SINGLE_TAP:
-        register_code(KC_SLSH);
-        unregister_code(KC_SLSH);
-        register_code(KC_SLSH);
+        register_code(KC_LSFT);
+        unregister_code(KC_LSFT);
+        register_code(KC_LSFT);
   }
 }
 
@@ -481,7 +481,7 @@ void lsft_reset (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_LSFT);
         break;
     case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_SLSH);
+        unregister_code(KC_LSFT);
   }
   xtap_lsft_state.state = 0;
 }
