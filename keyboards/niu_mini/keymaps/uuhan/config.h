@@ -14,7 +14,7 @@
 
 #define TAPPING_TERM 190
 
-#define LEADER_TIMEOUT 800
+#define LEADER_TIMEOUT 500
 
 /*
  * MIDI options

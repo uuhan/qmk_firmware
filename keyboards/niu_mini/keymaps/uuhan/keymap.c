@@ -93,7 +93,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   SH_T(KC_TAB), KC_Q            , KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    SH_T(KC_BSPC),
   CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
   TD(TD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  TD(TD_SLSH), MT(MOD_RSFT, KC_QUOT),
-  KC_LALT      , SH_TT         , KC_BSLS , GUI_T(KC_GRV), LT(_LOWER, KC_TAB), LT(_SPACEFN, KC_SPC), LT(_RAISE, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+  KC_LALT      , SH_TT         , KC_LEAD , GUI_T(KC_GRV), LT(_LOWER, KC_TAB), LT(_SPACEFN, KC_SPC), LT(_RAISE, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
 /* Mouse
@@ -614,3 +614,26 @@ const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
   {{11, 2}, {10, 2}, {9, 2}, {8, 2}, {7, 2}, {6, 2}, {5, 2}, {4, 2}, {3, 2}, {2, 2}, {1, 2}, {0, 2}},
   {{11, 3}, {10, 3}, {9, 3}, {8, 3}, {7, 3}, {6, 3}, {5, 3}, {4, 3}, {3, 3}, {2, 3}, {1, 3}, {0, 3}},
 };
+
+LEADER_EXTERNS();
+
+void matrix_scan_user(void) {
+    LEADER_DICTIONARY() {
+        leading = false;
+        leader_end();
+
+        // Firefox Keyshots
+        SEQ_ONE_KEY(KC_Q) {
+            SEND_STRING(SS_LALT(SS_LGUI("c")));
+        }
+        SEQ_ONE_KEY(KC_W) {
+            SEND_STRING(SS_LALT(SS_LGUI("k")));
+        }
+        SEQ_ONE_KEY(KC_E) {
+            SEND_STRING(SS_LALT(SS_LGUI("e")));
+        }
+        SEQ_ONE_KEY(KC_R) {
+            SEND_STRING(SS_LSFT(SS_TAP(X_F9)));
+        }
+    }
+}
