@@ -396,8 +396,10 @@ void slsh_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_RGUI);
         break;
     case DOUBLE_TAP:
-        add_weak_mods(MOD_LSFT);
         register_code(KC_SLSH);
+        unregister_code(KC_SLSH);
+        // add_weak_mods(MOD_LSFT);
+        // register_code(KC_SLSH);
         break;
     case DOUBLE_HOLD:
         register_code(KC_RSFT);
@@ -419,8 +421,10 @@ void slsh_reset (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_RGUI);
         break;
     case DOUBLE_TAP:
-        del_weak_mods(KC_LSFT);
+        register_code(KC_SLSH);
         unregister_code(KC_SLSH);
+        // del_weak_mods(KC_LSFT);
+        // unregister_code(KC_SLSH);
         break;
     case DOUBLE_HOLD:
         unregister_code(KC_RSFT);
