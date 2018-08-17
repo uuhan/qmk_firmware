@@ -84,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_BSPC, KC_P, KC_O, KC_I, KC_U, KC_Y, KC_T, KC_R, KC_E, KC_W, KC_Q, KC_LBRC, KC_RBRC, KC_TAB,
         RCTL_T(KC_ENT), KC_SCLN, KC_L, KC_K, KC_J, KC_H, KC_G, KC_F, KC_D, KC_S, KC_A, KC_TRNS, CTL_T(KC_ESC),
         KC_RSFT, KC_SLSH, KC_DOT, KC_COMM, KC_M, KC_N, KC_B, KC_V, KC_C, KC_X, KC_Z, KC_LSFT, KC_TRNS,
-                                KC_RALT, KC_TRNS, KC_SPC, KC_TRNS, KC_LALT),
+                                KC_RALT, KC_TRNS, KC_TRNS, KC_TRNS, KC_LALT),
 
     [SPACEFN] = LAYOUT(
         KC_BSLS, KC_EQL, KC_MINS, KC_0   , KC_9   , KC_8    , KC_7   , KC_P7  , KC_P8, KC_P9  , KC_PAST, KC_PMNS, KC_PPLS, KC_PSLS, RESET,
@@ -214,12 +214,17 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 void space_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_space_state.state = cur_dance(state);
+  uint8_t lctl_mask = get_mods() & (MOD_BIT(KC_LCTL));
   switch (xtap_space_state.state) {
     case SINGLE_TAP:
         register_code(KC_SPC);
         break;
     case SINGLE_HOLD:
-        layer_on(SPACEFN);
+        if (lctl_mask) {
+            layer_on(MIRROR);
+        } else {
+            layer_on(SPACEFN);
+        }
         break;
     case DOUBLE_TAP:
         register_code(KC_ENT);
@@ -235,12 +240,17 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void space_reset (qk_tap_dance_state_t *state, void *user_data) {
+  uint8_t lctl_mask = get_mods() & (MOD_BIT(KC_LCTL));
   switch (xtap_space_state.state) {
     case SINGLE_TAP:
         unregister_code(KC_SPC);
         break;
     case SINGLE_HOLD:
-        layer_off(SPACEFN);
+        if (lctl_mask) {
+            layer_off(MIRROR);
+        } else {
+            layer_off(SPACEFN);
+        }
         break;
     case DOUBLE_TAP:
         unregister_code(KC_ENT);
