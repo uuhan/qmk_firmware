@@ -22,6 +22,7 @@
 #include "process_keycode/process_tap_dance.h"
 
 extern keymap_config_t keymap_config;
+static bool lower_triggered = false;
 
 enum layers {
   _QWERTY,
@@ -272,92 +273,92 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case QWERTY:
-      if (record->event.pressed) {
-        print("mode just switched to qwerty and this is a huge string\n");
-        set_single_persistent_default_layer(_QWERTY);
-      }
-      return false;
-      break;
-    case SPACEFN:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_SPACEFN);
-      }
-      return false;
-      break;
-    case DVORAK:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_DVORAK);
-      }
-      return false;
-      break;
-    case MOUSE:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_MOUSE_L);
-      }
-      return false;
-      break;
-    case LOWER:
-      if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case BACKLIT:
-      if (record->event.pressed) {
-        layer_on(_BACKLIT);
-        // update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_BACKLIT);
-        // update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case PLOVER:
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-          stop_all_notes();
-          PLAY_SONG(plover_song);
-        #endif
-        layer_off(_RAISE);
-        layer_off(_LOWER);
-        layer_off(_ADJUST);
-        layer_on(_PLOVER);
-        if (!eeconfig_is_enabled()) {
-            eeconfig_init();
-        }
-        keymap_config.raw = eeconfig_read_keymap();
-        keymap_config.nkro = 1;
-        eeconfig_update_keymap(keymap_config.raw);
-      }
-      return false;
-      break;
-    case EXT_PLV:
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-          PLAY_SONG(plover_gb_song);
-        #endif
-        layer_off(_PLOVER);
-      }
-      return false;
-      break;
-  }
-  return true;
+    switch (keycode) {
+        case QWERTY:
+            if (record->event.pressed) {
+                print("mode just switched to qwerty and this is a huge string\n");
+                set_single_persistent_default_layer(_QWERTY);
+            }
+            return false;
+            break;
+        case SPACEFN:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_SPACEFN);
+            }
+            return false;
+            break;
+        case DVORAK:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_DVORAK);
+            }
+            return false;
+            break;
+        case MOUSE:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_MOUSE_L);
+            }
+            return false;
+            break;
+        case LOWER:
+            if (record->event.pressed) {
+                layer_on(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            } else {
+                layer_off(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            }
+            return false;
+            break;
+        case RAISE:
+            if (record->event.pressed) {
+                layer_on(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            } else {
+                layer_off(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            }
+            return false;
+            break;
+        case BACKLIT:
+            if (record->event.pressed) {
+                layer_on(_BACKLIT);
+                // update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            } else {
+                layer_off(_BACKLIT);
+                // update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            }
+            return false;
+            break;
+        case PLOVER:
+            if (record->event.pressed) {
+#ifdef AUDIO_ENABLE
+                stop_all_notes();
+                PLAY_SONG(plover_song);
+#endif
+                layer_off(_RAISE);
+                layer_off(_LOWER);
+                layer_off(_ADJUST);
+                layer_on(_PLOVER);
+                if (!eeconfig_is_enabled()) {
+                    eeconfig_init();
+                }
+                keymap_config.raw = eeconfig_read_keymap();
+                keymap_config.nkro = 1;
+                eeconfig_update_keymap(keymap_config.raw);
+            }
+            return false;
+            break;
+        case EXT_PLV:
+            if (record->event.pressed) {
+#ifdef AUDIO_ENABLE
+                PLAY_SONG(plover_gb_song);
+#endif
+                layer_off(_PLOVER);
+            }
+            return false;
+            break;
+    }
+    return true;
 }
 
 int cur_dance (qk_tap_dance_state_t *state) {
@@ -703,7 +704,11 @@ void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
 void lower_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_lower_state.state) {
     case SINGLE_TAP:
-        unregister_code(KC_TAB);
+        if (state->interrupted) {
+            lower_triggered = true;
+        } else {
+            unregister_code(KC_TAB);
+        }
         break;
     case SINGLE_HOLD:
         layer_off(_LOWER);
