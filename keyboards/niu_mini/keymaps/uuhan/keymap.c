@@ -67,6 +67,7 @@ enum {
     TD_SLSH,
     TD_PIPE,
     TD_QUOT,
+    TD_QUOT_SHIFT,
     TD_LSFT,
 };
 
@@ -92,7 +93,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_planck_mit(
   SH_T(KC_TAB), KC_Q            , KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    SH_T(KC_BSPC),
   CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
-  TD(TD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  TD(TD_SLSH), MT(MOD_RSFT, KC_QUOT),
+  TD(TD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  TD(TD_SLSH), TD(TD_QUOT_SHIFT),
   KC_LALT      , SH_TT         , KC_LEAD , GUI_T(KC_GRV), LT(_LOWER, KC_TAB), LT(_SPACEFN, KC_SPC), LT(_RAISE, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
@@ -400,6 +401,12 @@ static xtap xtap_lsft_state = {
   .state = 0
 };
 
+static xtap xtap_quot_state = {
+  .is_press_action = true,
+  .is_keeping = false,
+  .state = 0
+};
+
 void click_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_cick_state.state = cur_dance(state);
   switch (xtap_cick_state.state) {
@@ -592,13 +599,59 @@ void lsft_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_lsft_state.state = 0;
 }
 
+void quot_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_quot_state.state = cur_dance(state);
+  switch (xtap_quot_state.state) {
+    case SINGLE_TAP:
+        // xtap_quot_state.timestamp = state->timer;
+        register_code(KC_QUOT);
+        break;
+    case SINGLE_HOLD:
+        register_code(KC_RSFT);
+        break;
+    case DOUBLE_TAP:
+        add_weak_mods(MOD_LSFT);
+        register_code(KC_QUOT);
+        break;
+    case DOUBLE_HOLD:
+        register_code(KC_RSFT);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        register_code(KC_RSFT);
+        unregister_code(KC_RSFT);
+        register_code(KC_RSFT);
+  }
+}
+
+void quot_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_quot_state.state) {
+    case SINGLE_TAP:
+        unregister_code(KC_QUOT);
+        break;
+    case SINGLE_HOLD:
+        unregister_code(KC_LSFT);
+        break;
+    case DOUBLE_TAP:
+        del_weak_mods(MOD_LSFT);
+        unregister_code(KC_QUOT);
+        break;
+    case DOUBLE_HOLD:
+        unregister_code(KC_RSFT);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        unregister_code(KC_RSFT);
+  }
+  xtap_quot_state.state = 0;
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [CLICK]    = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
-    [TD_SCLN]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
-    [TD_SLSH]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,slsh_finished,slsh_reset),
-    [TD_PIPE]  = ACTION_TAP_DANCE_DOUBLE(KC_PIPE, KC_BSLS),
-    [TD_QUOT]  = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
-    [TD_LSFT]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lsft_finished,lsft_reset),
+    [CLICK]         = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
+    [TD_SCLN]       = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
+    [TD_SLSH]       = ACTION_TAP_DANCE_FN_ADVANCED(NULL,slsh_finished,slsh_reset),
+    [TD_PIPE]       = ACTION_TAP_DANCE_DOUBLE(KC_PIPE, KC_BSLS),
+    [TD_QUOT]       = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
+    [TD_LSFT]       = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lsft_finished,lsft_reset),
+    [TD_QUOT_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, quot_finished, quot_reset),
 };
 
 const uint16_t PROGMEM fn_actions[] = {
