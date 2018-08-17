@@ -28,6 +28,7 @@ enum layers {
   _MOUSE_L,
   _MOUSE_R,
   _SPACEFN,
+  _MIRROR,
   _FNKEYS,
   _DVORAK,
   _LOWER,
@@ -40,6 +41,7 @@ enum layers {
 enum keycodes {
   QWERTY = SAFE_RANGE,
   SPACEFN,
+  MIRROR,
   FNKEYS,
   DVORAK,
   MOUSE,
@@ -122,22 +124,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_LCTL, KC_LGUI, KC_LALT, _______, KC_BTN3, TD(CLICK) , KC_BTN2, KC_LEFT, KC_DOWN   , KC_UP  , KC_RGHT
 ),
 
-/* Colemak
- * ,-----------------------------------------------------------------------------------.
- * | Tab  |   Q  |   W  |   F  |   P  |   G  |   J  |   L  |   U  |   Y  |   ;  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |   A  |   R  |   S  |   T  |   D  |   H  |   N  |   E  |   I  |   O  |  "   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   K  |   M  |   ,  |   .  |   /  |Enter |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Ctrl | Alt  | GUI  |Brite |Lower |    Space    |Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
- */
 [_SPACEFN] = LAYOUT_planck_mit(
   KC_BSPC, KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , KC_GRV , KC_HOME, KC_PGUP, KC_PGDN, KC_END, KC_TAB,
   GUI_T(KC_ENT) , KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSLS, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, TD(TD_QUOT), KC_ESC,
   KC_LSFT, KC_RPRN, KC_LCBR, KC_RCBR, KC_BSLS, KC_UNDS, KC_PLUS, KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_TRNS,
   KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER  ,     _______     , RAISE  , KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT
+),
+
+[_MIRROR] = LAYOUT_planck_mit(
+  KC_BSPC, KC_P, KC_O,    KC_I,    KC_U,    KC_Y,    KC_T,    KC_R,    KC_E,    KC_W,    KC_Q,  KC_TAB,
+  KC_ENT,  KC_L,    KC_K,    KC_J,    KC_H,    KC_G,    KC_F,    KC_D,    KC_S,  KC_A, _______  , KC_LCTL,
+  KC_RSFT, KC_SLSH, KC_COMM, KC_DOT,  KC_M,    KC_N,    KC_B,    KC_V,    KC_C, KC_X,  KC_Z, KC_LSFT,
+  KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, RAISE, KC_SPC, LOWER,   KC_LGUI, _______, _______,  KC_LALT
 ),
 
 [_FNKEYS] = LAYOUT_planck_mit(
@@ -276,6 +274,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case SPACEFN:
       if (record->event.pressed) {
         set_single_persistent_default_layer(_SPACEFN);
+      }
+      return false;
+      break;
+    case MIRROR:
+      if (record->event.pressed) {
+        set_single_persistent_default_layer(_MIRROR);
       }
       return false;
       break;
@@ -460,12 +464,17 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_scln_state.state = cur_dance(state);
+  uint8_t rctl_mask = get_mods() & (MOD_BIT(KC_RCTL));
   switch (xtap_scln_state.state) {
     case SINGLE_TAP:
         register_code(KC_SCLN);
         break;
     case SINGLE_HOLD:
-        layer_on(_MOUSE_R);
+        if (rctl_mask) {
+            layer_on(_MIRROR);
+        } else {
+            layer_on(_MOUSE_R);
+        }
         break;
     case DOUBLE_TAP:
         add_weak_mods(MOD_LSFT);
@@ -482,12 +491,17 @@ void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
+  uint8_t rctl_mask = get_mods() & (MOD_BIT(KC_RCTL));
   switch (xtap_scln_state.state) {
     case SINGLE_TAP:
         unregister_code(KC_SCLN);
         break;
     case SINGLE_HOLD:
-        layer_off(_MOUSE_R);
+        if (rctl_mask) {
+            layer_off(_MIRROR);
+        } else {
+            layer_off(_MOUSE_R);
+        }
         break;
     case DOUBLE_TAP:
         del_weak_mods(MOD_LSFT);
