@@ -632,7 +632,7 @@ void quot_reset (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_LSFT);
         break;
     case DOUBLE_TAP:
-        del_weak_mods(MOD_LSFT);
+        del_weak_mods(MOD_RSFT);
         unregister_code(KC_QUOT);
         break;
     case DOUBLE_HOLD:
