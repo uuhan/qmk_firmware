@@ -28,7 +28,8 @@ enum layers {
   _MOUSE_L,
   _MOUSE_R,
   _SPACEFN,
-  _MIRROR,
+  _MIRROR_L,
+  _MIRROR_R,
   _FNKEYS,
   _DVORAK,
   _LOWER,
@@ -41,7 +42,6 @@ enum layers {
 enum keycodes {
   QWERTY = SAFE_RANGE,
   SPACEFN,
-  MIRROR,
   FNKEYS,
   DVORAK,
   MOUSE,
@@ -71,6 +71,8 @@ enum {
     TD_QUOT,
     TD_QUOT_SHIFT,
     TD_LSFT,
+    TD_LOWER,
+    TD_RAISE,
 };
 
 typedef struct {
@@ -96,7 +98,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   SH_T(KC_TAB), KC_Q            , KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    SH_T(KC_BSPC),
   CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
   TD(TD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  TD(TD_SLSH), TD(TD_QUOT_SHIFT),
-  KC_LALT      , SH_TT         , KC_LEAD , GUI_T(KC_GRV), LT(_LOWER, KC_TAB), LT(_SPACEFN, KC_SPC), LT(_RAISE, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+  KC_LALT      , SH_TT         , KC_LEAD , GUI_T(KC_GRV), TD(TD_LOWER), LT(_SPACEFN, KC_SPC), LT(_RAISE, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
 /* Mouse
@@ -131,7 +133,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER  ,     _______     , RAISE  , KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT
 ),
 
-[_MIRROR] = LAYOUT_planck_mit(
+[_MIRROR_L] = LAYOUT_planck_mit(
+  KC_BSPC, KC_P, KC_O,    KC_I,    KC_U,    KC_Y,    KC_T,    KC_R,    KC_E,    KC_W,    KC_Q,  KC_TAB,
+  KC_ENT,  KC_SCLN, KC_L,    KC_K,    KC_J,    KC_H,    KC_G,    KC_F,    KC_D,    KC_S,  KC_A, KC_LCTL,
+  KC_RSFT, KC_SLSH, KC_COMM, KC_DOT,  KC_M,    KC_N,    KC_B,    KC_V,    KC_C, KC_X,  KC_Z, KC_LSFT,
+  KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, RAISE, KC_SPC, LOWER,   KC_LGUI, _______, _______,  KC_LALT
+),
+
+[_MIRROR_R] = LAYOUT_planck_mit(
   KC_BSPC, KC_P, KC_O,    KC_I,    KC_U,    KC_Y,    KC_T,    KC_R,    KC_E,    KC_W,    KC_Q,  KC_TAB,
   KC_ENT,  KC_L,    KC_K,    KC_J,    KC_H,    KC_G,    KC_F,    KC_D,    KC_S,  KC_A, _______  , KC_LCTL,
   KC_RSFT, KC_SLSH, KC_COMM, KC_DOT,  KC_M,    KC_N,    KC_B,    KC_V,    KC_C, KC_X,  KC_Z, KC_LSFT,
@@ -176,8 +185,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT_planck_mit(
   ALT_T(KC_ESC) , KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7   , KC_8   ,  KC_9   , KC_0   ,  KC_DEL,
-  GUI_T(KC_BSPC), KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, KC_MINS, KC_EQL ,  KC_LBRC, KC_RBRC,  KC_GRV,
-  F(0)          , KC_MINS, KC_EQL , KC_BSLS, KC_GRV,  KC_BSPC, _______, _______, _______,  _______, KC_BSLS, _______,
+  CTL_T(KC_BSPC), KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, KC_MINS, KC_EQL ,  KC_LBRC, KC_RBRC,  KC_GRV,
+  F(0)          , KC_LGUI, KC_LCTL, KC_LALT, _______, KC_BSPC, _______, _______, _______,  _______, KC_BSLS, _______,
   _______, _______, _______, _______, _______,     _______,     RAISE, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
@@ -196,7 +205,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,
   KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_TILD,
   _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, KC_LT  , KC_GT  , KC_PIPE, KC_DQUO,
-  _______, _______, _______, _______, _______,     _______,      LOWER, KC_HOME, KC_PGDN, KC_PGUP,  KC_END
+  _______, _______, _______, _______, LOWER ,     _______,      _______, KC_HOME, KC_PGDN, KC_PGUP,  KC_END
 ),
 
 /* Plover layer (http://opensteno.org)
@@ -274,12 +283,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case SPACEFN:
       if (record->event.pressed) {
         set_single_persistent_default_layer(_SPACEFN);
-      }
-      return false;
-      break;
-    case MIRROR:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_MIRROR);
       }
       return false;
       break;
@@ -483,7 +486,7 @@ void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
         break;
     case SINGLE_HOLD:
         if (rctl_mask) {
-            layer_on(_MIRROR);
+            layer_on(_MIRROR_R);
         } else {
             layer_on(_MOUSE_R);
         }
@@ -510,7 +513,7 @@ void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
         break;
     case SINGLE_HOLD:
         if (rctl_mask) {
-            layer_off(_MIRROR);
+            layer_off(_MIRROR_R);
         } else {
             layer_off(_MOUSE_R);
         }
@@ -672,45 +675,48 @@ void quot_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_lower_state.state = cur_dance(state);
+  uint8_t lctl_mask = get_mods() & (MOD_BIT(KC_LCTL));
   switch (xtap_lower_state.state) {
     case SINGLE_TAP:
-        // xtap_lower_state.timestamp = state->timer;
-        register_code(KC_QUOT);
+        register_code(KC_TAB);
         break;
     case SINGLE_HOLD:
-        register_code(KC_RSFT);
+        if (lctl_mask) {
+            layer_on(_MIRROR_L);
+        } else {
+            layer_on(_LOWER);
+        }
         break;
     case DOUBLE_TAP:
-        add_weak_mods(MOD_LSFT);
-        register_code(KC_QUOT);
+        register_code(KC_ENT);
         break;
     case DOUBLE_HOLD:
-        register_code(KC_RSFT);
+        register_code(KC_TAB);
         break;
     case DOUBLE_SINGLE_TAP:
-        register_code(KC_RSFT);
-        unregister_code(KC_RSFT);
-        register_code(KC_RSFT);
+        register_code(KC_TAB);
+        unregister_code(KC_TAB);
+        register_code(KC_TAB);
   }
 }
 
 void lower_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_lower_state.state) {
     case SINGLE_TAP:
-        unregister_code(KC_QUOT);
+        unregister_code(KC_TAB);
         break;
     case SINGLE_HOLD:
-        unregister_code(KC_RSFT);
+        layer_off(_LOWER);
+        layer_off(_MIRROR_L);
         break;
     case DOUBLE_TAP:
-        del_weak_mods(MOD_LSFT);
-        unregister_code(KC_QUOT);
+        unregister_code(KC_ENT);
         break;
     case DOUBLE_HOLD:
-        unregister_code(KC_RSFT);
+        unregister_code(KC_TAB);
         break;
     case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_RSFT);
+        unregister_code(KC_TAB);
   }
   xtap_lower_state.state = 0;
 }
@@ -767,7 +773,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_PIPE]       = ACTION_TAP_DANCE_DOUBLE(KC_PIPE, KC_BSLS),
     [TD_QUOT]       = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
     [TD_LSFT]       = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lsft_finished,lsft_reset),
-    [TD_QUOT_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, quot_finished, quot_reset),
+    [TD_LOWER]      = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lower_finished,lower_reset),
+    [TD_QUOT_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,quot_finished,quot_reset),
 };
 
 const uint16_t PROGMEM fn_actions[] = {
