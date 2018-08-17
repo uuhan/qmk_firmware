@@ -629,10 +629,10 @@ void quot_reset (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_QUOT);
         break;
     case SINGLE_HOLD:
-        unregister_code(KC_LSFT);
+        unregister_code(KC_RSFT);
         break;
     case DOUBLE_TAP:
-        del_weak_mods(MOD_RSFT);
+        del_weak_mods(MOD_LSFT);
         unregister_code(KC_QUOT);
         break;
     case DOUBLE_HOLD:
