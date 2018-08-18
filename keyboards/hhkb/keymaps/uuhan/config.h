@@ -17,7 +17,7 @@
 
 #ifdef TAPPING_TERM
   #undef TAPPING_TERM
-  #define TAPPING_TERM 190
+  #define TAPPING_TERM 200
 #endif
 
 // Disable MACRO support to shrink size
