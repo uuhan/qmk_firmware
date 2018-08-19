@@ -33,7 +33,6 @@ enum {
     SPACE,
     QUOTE,
     SCLN,
-    GRAVE,
     SLSH,
     PIPE,
     LSFT,
@@ -56,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
         CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(MOD_RCTL, KC_ENT),
         TD(LSFT)     , GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, TD(SLSH), MT(MOD_RSFT, KC_ESC), TT(HHKB),
-                        KC_LALT, TD(GRAVE), TD(SPACE), TT(MIRROR), KC_RALT),
+                        KC_LALT, LT(MIRROR, KC_GRV), TD(SPACE), TT(MIRROR), KC_RALT),
 
     [HHKB] = LAYOUT(
         KC_GRV, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_INS, KC_DEL,
@@ -312,50 +311,6 @@ void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_scln_state.state = 0;
 }
 
-void grave_finished (qk_tap_dance_state_t *state, void *user_data) {
-  xtap_state.state = cur_dance(state);
-  switch (xtap_state.state) {
-    case SINGLE_TAP:
-        register_code(KC_GRV);
-        break;
-    case SINGLE_HOLD:
-        layer_on(MIRROR);
-        break;
-    case DOUBLE_TAP:
-        add_weak_mods(MOD_LSFT);
-        register_code(KC_GRV);
-        break;
-    case DOUBLE_HOLD:
-        register_code(KC_GRV);
-        break;
-    case DOUBLE_SINGLE_TAP:
-        register_code(KC_GRV);
-        unregister_code(KC_GRV);
-        register_code(KC_GRV);
-  }
-}
-
-void grave_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_state.state) {
-    case SINGLE_TAP:
-        unregister_code(KC_GRV);
-        break;
-    case SINGLE_HOLD:
-        layer_off(MIRROR);
-        break;
-    case DOUBLE_TAP:
-        del_weak_mods(KC_LSFT);
-        unregister_code(KC_GRV);
-        break;
-    case DOUBLE_HOLD:
-        unregister_code(KC_GRV);
-        break;
-    case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_GRV);
-  }
-  xtap_state.state = 0;
-}
-
 void quote_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_state.state = cur_dance(state);
   switch (xtap_state.state) {
@@ -522,7 +477,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
     [QUOTE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,quote_finished,quote_reset),
     [SCLN]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
-    [GRAVE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,grave_finished,grave_reset),
     [SLSH]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,slsh_finished,slsh_reset),
     [PIPE]  = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, pipe_dance, NULL, 200),
     [LSFT]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lsft_finished,lsft_reset),
