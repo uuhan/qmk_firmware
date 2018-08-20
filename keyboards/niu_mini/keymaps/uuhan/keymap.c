@@ -22,7 +22,6 @@
 #include "process_keycode/process_tap_dance.h"
 
 extern keymap_config_t keymap_config;
-static bool lower_triggered = false;
 
 enum layers {
   _QWERTY,
@@ -97,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_QWERTY] = LAYOUT_planck_mit(
   SH_T(KC_TAB), KC_Q            , KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    SH_T(KC_BSPC),
-  CTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
+  LCTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
   TD(TD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  TD(TD_SLSH), TD(TD_QUOT_SHIFT),
   KC_LALT      , SH_TT         , KC_LEAD , GUI_T(KC_GRV), TD(TD_LOWER), LT(_SPACEFN, KC_SPC), LT(_RAISE, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
@@ -135,9 +134,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_MIRROR_L] = LAYOUT_planck_mit(
-  KC_BSPC, KC_P, KC_O,    KC_I,    KC_U,    KC_Y,    KC_T,    KC_R,    KC_E,    KC_W,    KC_Q,  KC_TAB,
-  KC_ENT,  KC_SCLN, KC_L,    KC_K,    KC_J,    KC_H,    KC_G,    KC_F,    KC_D,    KC_S,  KC_A, KC_LCTL,
-  KC_RSFT, KC_SLSH, KC_COMM, KC_DOT,  KC_M,    KC_N,    KC_B,    KC_V,    KC_C, KC_X,  KC_Z, KC_LSFT,
+  KC_BSPC, KC_P   , KC_O,    KC_I,    KC_U,    KC_Y,    KC_T,    KC_R,    KC_E,    KC_W,    KC_Q,  KC_TAB,
+  RCTL_T(KC_ENT) , KC_SCLN, KC_L,    KC_K,    KC_J,    KC_H,    KC_G,    KC_F,    KC_D,    KC_S,  KC_A, KC_LCTL,
+  KC_TRNS, KC_SLSH, KC_COMM, KC_DOT,  KC_M,    KC_N,    KC_B,    KC_V,    KC_C, KC_X,  KC_Z, KC_LSFT,
   KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, RAISE, KC_SPC, LOWER,   KC_LGUI, _______, _______,  KC_LALT
 ),
 
@@ -677,6 +676,7 @@ void quot_reset (qk_tap_dance_state_t *state, void *user_data) {
 void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_lower_state.state = cur_dance(state);
   uint8_t lctl_mask = get_mods() & (MOD_BIT(KC_LCTL));
+  uint8_t lsft_mask = get_mods() & (MOD_BIT(KC_LSFT));
   switch (xtap_lower_state.state) {
     case SINGLE_TAP:
         register_code(KC_TAB);
@@ -684,8 +684,14 @@ void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
     case SINGLE_HOLD:
         if (lctl_mask) {
             layer_on(_MIRROR_L);
+            return;
+        } if (lsft_mask) {
+            del_mods(MOD_BIT(KC_LSFT));
+            layer_on(_MIRROR_L);
+            return;
         } else {
             layer_on(_LOWER);
+            return;
         }
         break;
     case DOUBLE_TAP:
@@ -704,11 +710,7 @@ void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
 void lower_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_lower_state.state) {
     case SINGLE_TAP:
-        if (state->interrupted) {
-            lower_triggered = true;
-        } else {
-            unregister_code(KC_TAB);
-        }
+        unregister_code(KC_TAB);
         break;
     case SINGLE_HOLD:
         layer_off(_LOWER);
