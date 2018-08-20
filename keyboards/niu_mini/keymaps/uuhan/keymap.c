@@ -28,7 +28,7 @@ enum layers {
   _MOUSE_L,
   _MOUSE_R,
   _SPACEFN,
-  _MIRROR_L,
+  _MIRROR,
   _FNKEYS,
   _DVORAK,
   _LOWER,
@@ -97,7 +97,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   SH_T(KC_TAB), KC_Q            , KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    SH_T(KC_BSPC),
   LCTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
   TD(TD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  TD(TD_SLSH), TD(TD_QUOT_SHIFT),
-  KC_LALT      , SH_TT         , KC_LEAD , GUI_T(KC_GRV), TD(TD_LOWER), LT(_SPACEFN, KC_SPC), LT(_RAISE, KC_ENT),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+  KC_LALT      , SH_TT         , KC_LEAD , GUI_T(KC_GRV), TD(TD_LOWER), LT(_SPACEFN, KC_SPC), TD(TD_RAISE),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
 /* Mouse
@@ -132,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER  ,     _______     , RAISE  , KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT
 ),
 
-[_MIRROR_L] = LAYOUT_planck_mit(
+[_MIRROR] = LAYOUT_planck_mit(
   KC_BSPC, KC_P   , KC_O,    KC_I,    KC_U,    KC_Y,    KC_T,    KC_R,    KC_E,    KC_W,    KC_Q,  KC_TAB,
   RCTL_T(KC_ENT) , KC_SCLN, KC_L,    KC_K,    KC_J,    KC_H,    KC_G,    KC_F,    KC_D,    KC_S,  KC_A, KC_LCTL,
   KC_TRNS, KC_SLSH, KC_COMM, KC_DOT,  KC_M,    KC_N,    KC_B,    KC_V,    KC_C, KC_X,  KC_Z, KC_LSFT,
@@ -674,11 +674,11 @@ void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
         break;
     case SINGLE_HOLD:
         if (lctl_mask) {
-            layer_on(_MIRROR_L);
+            layer_on(_MIRROR);
             return;
         } if (lsft_mask) {
             del_mods(MOD_BIT(KC_LSFT));
-            layer_on(_MIRROR_L);
+            layer_on(_MIRROR);
             return;
         } else {
             layer_on(_LOWER);
@@ -705,7 +705,7 @@ void lower_reset (qk_tap_dance_state_t *state, void *user_data) {
         break;
     case SINGLE_HOLD:
         layer_off(_LOWER);
-        layer_off(_MIRROR_L);
+        layer_off(_MIRROR);
         break;
     case DOUBLE_TAP:
         unregister_code(KC_ENT);
@@ -721,45 +721,55 @@ void lower_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 void raise_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_raise_state.state = cur_dance(state);
+  uint8_t rctl_mask = get_mods() & (MOD_BIT(KC_RCTL));
+  uint8_t rsft_mask = get_mods() & (MOD_BIT(KC_RSFT));
   switch (xtap_raise_state.state) {
     case SINGLE_TAP:
-        // xtap_raise_state.timestamp = state->timer;
-        register_code(KC_QUOT);
+        register_code(KC_ENT);
         break;
     case SINGLE_HOLD:
-        register_code(KC_RSFT);
+        if (rctl_mask) {
+            layer_on(_MIRROR);
+            return;
+        } if (rsft_mask) {
+            del_mods(MOD_BIT(KC_RSFT));
+            layer_on(_MIRROR);
+            return;
+        } else {
+            layer_on(_RAISE);
+            return;
+        }
         break;
     case DOUBLE_TAP:
-        add_weak_mods(MOD_LSFT);
-        register_code(KC_QUOT);
+        register_code(KC_ENT);
         break;
     case DOUBLE_HOLD:
-        register_code(KC_RSFT);
+        register_code(KC_ENT);
         break;
     case DOUBLE_SINGLE_TAP:
-        register_code(KC_RSFT);
-        unregister_code(KC_RSFT);
-        register_code(KC_RSFT);
+        register_code(KC_ENT);
+        unregister_code(KC_ENT);
+        register_code(KC_ENT);
   }
 }
 
 void raise_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_raise_state.state) {
     case SINGLE_TAP:
-        unregister_code(KC_QUOT);
+        unregister_code(KC_ENT);
         break;
     case SINGLE_HOLD:
-        unregister_code(KC_RSFT);
+        layer_off(_MIRROR);
+        layer_off(_RAISE);
         break;
     case DOUBLE_TAP:
-        del_weak_mods(MOD_LSFT);
-        unregister_code(KC_QUOT);
+        unregister_code(KC_ENT);
         break;
     case DOUBLE_HOLD:
-        unregister_code(KC_RSFT);
+        unregister_code(KC_ENT);
         break;
     case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_RSFT);
+        unregister_code(KC_ENT);
   }
   xtap_raise_state.state = 0;
 }
@@ -772,6 +782,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_QUOT]       = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
     [TD_LSFT]       = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lsft_finished,lsft_reset),
     [TD_LOWER]      = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lower_finished,lower_reset),
+    [TD_RAISE]      = ACTION_TAP_DANCE_FN_ADVANCED(NULL,raise_finished,raise_reset),
     [TD_QUOT_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,quot_finished,quot_reset),
 };
 
