@@ -29,7 +29,6 @@ enum layers {
   _MOUSE_R,
   _SPACEFN,
   _MIRROR_L,
-  _MIRROR_R,
   _FNKEYS,
   _DVORAK,
   _LOWER,
@@ -137,13 +136,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_BSPC, KC_P   , KC_O,    KC_I,    KC_U,    KC_Y,    KC_T,    KC_R,    KC_E,    KC_W,    KC_Q,  KC_TAB,
   RCTL_T(KC_ENT) , KC_SCLN, KC_L,    KC_K,    KC_J,    KC_H,    KC_G,    KC_F,    KC_D,    KC_S,  KC_A, KC_LCTL,
   KC_TRNS, KC_SLSH, KC_COMM, KC_DOT,  KC_M,    KC_N,    KC_B,    KC_V,    KC_C, KC_X,  KC_Z, KC_LSFT,
-  KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, RAISE, KC_SPC, LOWER,   KC_LGUI, _______, _______,  KC_LALT
-),
-
-[_MIRROR_R] = LAYOUT_planck_mit(
-  KC_BSPC, KC_P, KC_O,    KC_I,    KC_U,    KC_Y,    KC_T,    KC_R,    KC_E,    KC_W,    KC_Q,  KC_TAB,
-  KC_ENT,  KC_L,    KC_K,    KC_J,    KC_H,    KC_G,    KC_F,    KC_D,    KC_S,  KC_A, _______  , KC_LCTL,
-  KC_RSFT, KC_SLSH, KC_COMM, KC_DOT,  KC_M,    KC_N,    KC_B,    KC_V,    KC_C, KC_X,  KC_Z, KC_LSFT,
   KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, RAISE, KC_SPC, LOWER,   KC_LGUI, _______, _______,  KC_LALT
 ),
 
@@ -486,9 +478,12 @@ void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
         break;
     case SINGLE_HOLD:
         if (rctl_mask) {
-            layer_on(_MIRROR_R);
+            del_mods(MOD_BIT(KC_RCTL));
+            layer_on(_LOWER);
+            return;
         } else {
             layer_on(_MOUSE_R);
+            return;
         }
         break;
     case DOUBLE_TAP:
@@ -506,17 +501,13 @@ void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
-  uint8_t rctl_mask = get_mods() & (MOD_BIT(KC_RCTL));
   switch (xtap_scln_state.state) {
     case SINGLE_TAP:
         unregister_code(KC_SCLN);
         break;
     case SINGLE_HOLD:
-        if (rctl_mask) {
-            layer_off(_MIRROR_R);
-        } else {
-            layer_off(_MOUSE_R);
-        }
+        layer_off(_LOWER);
+        layer_off(_MOUSE_R);
         break;
     case DOUBLE_TAP:
         del_weak_mods(MOD_LSFT);
