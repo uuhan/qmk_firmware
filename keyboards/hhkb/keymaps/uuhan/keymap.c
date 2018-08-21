@@ -252,12 +252,16 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void space_reset (qk_tap_dance_state_t *state, void *user_data) {
+  uint8_t lctl_mask = get_mods() & (MOD_BIT(KC_LCTL));
   switch (xtap_space_state.state) {
     case SINGLE_TAP:
         break;
     case SINGLE_HOLD:
         layer_off(MIRROR);
         layer_off(SPACEFN);
+        if (lctl_mask) {
+            del_mods(MOD_BIT(KC_LCTL));
+        }
         break;
     case DOUBLE_TAP:
         unregister_code(KC_ENT);
