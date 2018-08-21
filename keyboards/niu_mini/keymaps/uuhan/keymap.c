@@ -670,7 +670,12 @@ void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
   uint8_t lsft_mask = get_mods() & (MOD_BIT(KC_LSFT));
   switch (xtap_lower_state.state) {
     case SINGLE_TAP:
-        register_code(KC_TAB);
+        if (state->interrupted) {
+            layer_on(_LOWER);
+        } else {
+            register_code(KC_TAB);
+            unregister_code(KC_TAB);
+        }
         break;
     case SINGLE_HOLD:
         if (lctl_mask) {
@@ -701,7 +706,7 @@ void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
 void lower_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_lower_state.state) {
     case SINGLE_TAP:
-        unregister_code(KC_TAB);
+        layer_off(_LOWER);
         break;
     case SINGLE_HOLD:
         layer_off(_LOWER);
@@ -725,7 +730,12 @@ void raise_finished (qk_tap_dance_state_t *state, void *user_data) {
   uint8_t rsft_mask = get_mods() & (MOD_BIT(KC_RSFT));
   switch (xtap_raise_state.state) {
     case SINGLE_TAP:
-        register_code(KC_ENT);
+        if (state->interrupted) {
+            layer_on(_RAISE);
+        } else {
+            register_code(KC_ENT);
+            unregister_code(KC_ENT);
+        }
         break;
     case SINGLE_HOLD:
         if (rctl_mask) {
@@ -756,7 +766,7 @@ void raise_finished (qk_tap_dance_state_t *state, void *user_data) {
 void raise_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_raise_state.state) {
     case SINGLE_TAP:
-        unregister_code(KC_ENT);
+        layer_off(_RAISE);
         break;
     case SINGLE_HOLD:
         layer_off(_MIRROR);
