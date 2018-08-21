@@ -34,7 +34,6 @@ enum {
     QUOTE,
     SCLN,
     SLSH,
-    PIPE,
     LSFT,
 };
 
@@ -478,7 +477,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [QUOTE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,quote_finished,quote_reset),
     [SCLN]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,scln_finished,scln_reset),
     [SLSH]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,slsh_finished,slsh_reset),
-    [PIPE]  = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, pipe_dance, NULL, 200),
     [LSFT]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lsft_finished,lsft_reset),
 };
 
