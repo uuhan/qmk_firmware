@@ -96,8 +96,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_SPACEFN] = KEYMAP(
     _____, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, _____  , _____, _____  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
-    _____, KC_LBRC, KC_RBRC, KC_UP  , _____  , _____  , _____  , _____, _____  , KC_RGUI, KC_WH_D, KC_MS_U, KC_WH_U, _____  , _____  ,
-    _____, KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, _____  , _____  , _____, _____  , KC_RCTL, KC_MS_L, KC_MS_D, KC_MS_R, _____  , _____  ,
+    _____, KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , _____  , _____, _____  , KC_RGUI, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, _____  ,
+    _____, KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSLS, _____  , _____, _____  , KC_RCTL, KC_MINS, KC_EQL , KC_BSLS, KC_GRV , _____  ,
     _____, KC_RPRN, KC_LCBR, KC_RCBR, _____  , _____  , _____  , _____, _____  , KC_RALT, _____  , _____  , _____  , _____  , _____  ,
     _____, _____  , _____  , _____  , _____  , _____  , _____  , _____, KC_BTN3, KC_BTN1, KC_BTN2, _____  , _____  , _____  , _____
   ),
