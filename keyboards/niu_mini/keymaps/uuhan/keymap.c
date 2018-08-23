@@ -176,10 +176,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT_planck_mit(
-  ALT_T(KC_BSPC) , KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7   , KC_8   ,  KC_9   , KC_0   ,  KC_DEL,
-  CTL_T(KC_ENT)  , KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, KC_MINS, KC_EQL ,  KC_LBRC, KC_RBRC,  KC_GRV,
-  _______, KC_SLSH, KC_DOT, KC_EQL, _______, KC_BSPC, _______, _______, _______,  _______, KC_BSLS, _______,
-  _______, _______, _______, _______, _______,     _______,     RAISE, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
+  ALT_T(KC_BSPC), KC_1, KC_2, KC_3   , KC_4  , KC_5   , KC_6   , KC_7   , KC_8   ,  KC_9   , KC_0   ,  KC_DEL,
+  CTL_T(KC_ENT) , KC_5, KC_6, KC_7   , KC_8  , KC_0   , _______, KC_MINS, KC_EQL ,  KC_LBRC, KC_RBRC,  KC_GRV,
+  _______       , KC_9, KC_0, KC_MINS, KC_EQL, KC_BSPC, _______, _______, _______,  _______, KC_BSLS, _______,
+  _______       , _______, _______, _______, _______,     _______,     RAISE, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
 /* Lower
