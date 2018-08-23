@@ -41,6 +41,7 @@ enum layers {
     LAYER_MOUSE_L,
     LAYER_MOUSE_R,
     LAYER_SPACEFN,
+    LAYER_FNKEYS,
     LAYER_COLEMAK,
     LAYER_RECORD,
     LAYER_FN,
@@ -71,11 +72,11 @@ enum my_keycods {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_QWERTY] = KEYMAP(
-    ALT_T(KC_ESC), TH_F1                   , TH_F2      , TH_F3      , TH_F4               , TH_F5                    , MM_0   , SH_TT  , MM_1   , TH_F6 , TH_F7 , TH_F8  , TH_F9 , TH_F10                    , KC_BSLS              ,
-    GUI_T(KC_TAB), KC_Q                    , KC_W       , KC_E       , KC_R                , KC_T                     , KC_MINS, KC_BSLS, KC_EQL , KC_Y  , KC_U  , KC_I   , KC_O  , KC_P                      , KC_BSPC              ,
-    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , KC_S       , KC_D       , KC_F                , KC_G                     , _____  , _____  , KC_HOME, KC_H  , KC_J  , KC_K   , KC_L  , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
-    KC_LSFT      , GUI_T(KC_Z)             , CTL_T(KC_X), ALT_T(KC_C), KC_V                , KC_B                     , KC_PGUP, KC_PGDN, KC_END , KC_N  , KC_M  , KC_COMM, KC_DOT, KC_SLSH                   , MT(MOD_RSFT, KC_QUOT),
-    KC_LALT      , _____                   , _____      , MOD_LALT   , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_BSPC, KC_ENT , KC_BSPC, KC_ENT, _____ , _____  , _____ , _____                     , _____
+    ALT_T(KC_ESC), TH_F1                   , TH_F2                 , TH_F3      , TH_F4               , TH_F5                    , MM_0   , SH_TT  , MM_1   , TH_F6 , TH_F7 , TH_F8  , TH_F9 , TH_F10                    , KC_BSLS              ,
+    GUI_T(KC_TAB), KC_Q                    , KC_W                  , KC_E       , KC_R                , KC_T                     , KC_MINS, KC_BSLS, KC_EQL , KC_Y  , KC_U  , KC_I   , KC_O  , KC_P                      , KC_BSPC              ,
+    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FNKEYS, KC_S), KC_D       , KC_F                , KC_G                     , _____  , _____  , KC_HOME, KC_H  , KC_J  , KC_K   , KC_L  , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
+    KC_LSFT      , GUI_T(KC_Z)             , CTL_T(KC_X)           , ALT_T(KC_C), KC_V                , KC_B                     , KC_PGUP, KC_PGDN, KC_END , KC_N  , KC_M  , KC_COMM, KC_DOT, KC_SLSH                   , MT(MOD_RSFT, KC_QUOT),
+    KC_LALT      , _____                   , _____                 , MOD_LALT   , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_BSPC, KC_ENT , KC_BSPC, KC_ENT, _____ , _____  , _____ , _____                     , _____
   ),
 
   [LAYER_MOUSE_L] = KEYMAP(
@@ -100,6 +101,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _____, KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSLS, _____  , _____, _____  , KC_RCTL, KC_MINS, KC_EQL , KC_BSLS, KC_GRV , _____  ,
     _____, KC_RPRN, KC_LCBR, KC_RCBR, _____  , _____  , _____  , _____, _____  , KC_RALT, _____  , _____  , _____  , _____  , _____  ,
     _____, _____  , _____  , _____  , _____  , _____  , _____  , _____, KC_BTN3, KC_BTN1, KC_BTN2, _____  , _____  , _____  , _____
+  ),
+
+  [LAYER_FNKEYS] = KEYMAP(
+    _____, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, _____ , _____, _____  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
+    _____, _____  , KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , _____ , _____, _____  , KC_RGUI, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, _____  ,
+    _____, _____  , _____  , KC_DOWN, KC_RGHT, KC_BSLS, _____ , _____, _____  , KC_RCTL, KC_MINS, KC_EQL , KC_BSLS, KC_GRV , _____  ,
+    _____, _____  , KC_LCBR, KC_RCBR, _____  , _____  , _____ , _____, _____  , KC_RALT, _____  , _____  , _____  , _____  , _____  ,
+    _____, _____  , _____  , KC_HOME, KC_PGUP, KC_PGDN, KC_END, _____, KC_BTN3, KC_BTN1, KC_BTN2, _____  , _____  , _____  , _____
   ),
 
 /* COLEMAK
