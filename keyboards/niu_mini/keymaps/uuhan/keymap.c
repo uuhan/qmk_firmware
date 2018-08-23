@@ -704,6 +704,10 @@ void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void lower_reset (qk_tap_dance_state_t *state, void *user_data) {
+  uint8_t rgui_mask = get_mods() & (MOD_BIT(KC_RGUI));
+  if (rgui_mask) {
+      del_mods(KC_RGUI);
+  }
   switch (xtap_lower_state.state) {
     case SINGLE_TAP:
         layer_off(_LOWER);
