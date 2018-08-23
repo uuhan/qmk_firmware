@@ -10,7 +10,7 @@ extern keymap_config_t keymap_config;
 
 // tap-hold settings
 #define LONGPRESS_DELAY 250
-#define TH_EVENTS_COUNT 12
+#define TH_EVENTS_COUNT 14
 
 
 void send_keycode(uint16_t keycode) {
@@ -60,6 +60,8 @@ enum my_keycods {
     TH_F10,
     TH_FMINS,
     TH_FEQL,
+    TH_COMM,
+    TH_DOT,
 };
 
 typedef struct {
@@ -78,7 +80,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ALT_T(KC_ESC), TH_F1 , TH_F2, TH_F3, TH_F4, TH_F5, TH_F6, TH_F7, TH_F8, TH_F9, TH_F10, TH_FMINS, TH_FEQL, KC_BSLS, KC_GRV,
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
         CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(MOD_RCTL, KC_ENT),
-        TD(LSFT)     , GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, TD(SLSH), MT(MOD_RSFT, KC_ESC), TT(HHKB),
+        TD(LSFT)     , GUI_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, TH_COMM, TH_DOT, TD(SLSH), MT(MOD_RSFT, KC_ESC), TT(HHKB),
                         KC_LALT, LT(MIRROR, KC_GRV), TD(SPACE), TT(MIRROR), KC_RALT),
 
     [HHKB] = LAYOUT(
@@ -529,6 +531,8 @@ static tap_hold_t th_events[] = {
     { .is_pressed = false, .timer = 0, .kc_tap = KC_0,    .kc_hold = KC_F10 }, // TH_F10
     { .is_pressed = false, .timer = 0, .kc_tap = KC_MINS, .kc_hold = KC_F11 }, // TH_FMINS
     { .is_pressed = false, .timer = 0, .kc_tap = KC_EQL,  .kc_hold = KC_F12 }, // TH_FEQL
+    { .is_pressed = false, .timer = 0, .kc_tap = KC_COMM, .kc_hold = KC_MINS}, // TH_COMMM
+    { .is_pressed = false, .timer = 0, .kc_tap = KC_DOT,  .kc_hold = KC_EQL }, // TH_DOT
 };
 
 void taphold_tapped(uint8_t index, bool pressed) {
@@ -563,7 +567,7 @@ const uint16_t PROGMEM fn_actions[] = {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-    case TH_F1 ... TH_FEQL:
+    case TH_F1 ... TH_DOT:
         taphold_tapped(keycode - TH_F1, record->event.pressed);
         return false;
     }
