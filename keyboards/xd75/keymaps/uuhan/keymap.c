@@ -71,11 +71,11 @@ enum my_keycods {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_QWERTY] = KEYMAP(
-    KC_ESC       , TH_F1                   , TH_F2, TH_F3   , TH_F4               , TH_F5 , MM_0   , SH_TT  , MM_1   , TH_F6 , TH_F7 , TH_F8  , TH_F9 , TH_F10 , KC_BSLS,
-    GUI_T(KC_TAB), KC_Q                    , KC_W , KC_E    , KC_R                , KC_T  , MM_2   , GOTO_FN, _____  , KC_Y  , KC_U  , KC_I   , KC_O  , KC_P   , KC_BSPC,
-    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , KC_S , KC_D    , KC_F                , KC_G  , _____  , _____  , _____  , KC_H  , KC_J  , KC_K   , KC_L  , KC_SCLN, KC_ENT ,
-    KC_LSFT      , GUI_T(KC_Z)             , KC_X , KC_C    , KC_V                , KC_B  , _____  , _____  , _____  , KC_N  , KC_M  , KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
-    KC_LALT      , _____                   , _____, MOD_LALT, LT(LAYER_FN, KC_TAB), KC_SPC, KC_BSPC, KC_ENT , KC_BSPC, KC_ENT, _____ , _____  , _____ , _____  , _____
+    ALT_T(KC_ESC), TH_F1                   , TH_F2      , TH_F3      , TH_F4               , TH_F5 , MM_0   , SH_TT  , MM_1   , TH_F6 , TH_F7 , TH_F8  , TH_F9 , TH_F10 , KC_BSLS,
+    GUI_T(KC_TAB), KC_Q                    , KC_W       , KC_E       , KC_R                , KC_T  , MM_2   , GOTO_FN, _____  , KC_Y  , KC_U  , KC_I   , KC_O  , KC_P   , KC_BSPC,
+    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , KC_S       , KC_D       , KC_F                , KC_G  , _____  , _____  , _____  , KC_H  , KC_J  , KC_K   , KC_L  , KC_SCLN, KC_ENT ,
+    KC_LSFT      , GUI_T(KC_Z)             , CTL_T(KC_X), ALT_T(KC_C), KC_V                , KC_B  , _____  , _____  , _____  , KC_N  , KC_M  , KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
+    KC_LALT      , _____                   , _____      , MOD_LALT   , LT(LAYER_FN, KC_TAB), KC_SPC, KC_BSPC, KC_ENT , KC_BSPC, KC_ENT, _____ , _____  , _____ , _____  , _____
   ),
 
   [LAYER_MOUSE_L] = KEYMAP(
