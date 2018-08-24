@@ -39,7 +39,12 @@ enum layers {
 };
 
 enum keycodes {
-  QWERTY = SAFE_RANGE,
+  // TH
+  TH_COMM = SAFE_RANGE,
+  TH_DOT,
+  //  TH
+
+  QWERTY,
   SPACEFN,
   FNKEYS,
   DVORAK,
@@ -50,6 +55,10 @@ enum keycodes {
   BACKLIT,
   EXT_PLV
 };
+
+// tap-hold settings
+#define LONGPRESS_DELAY 180
+const int TH_EVENTS_COUNT = TH_DOT - TH_COMM;
 
 enum {
     SINGLE_TAP = 1,
@@ -94,10 +103,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_mit(
-  SH_T(KC_TAB), KC_Q            , KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-  LCTL_T(KC_ESC), LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S),    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN), MT(MOD_RCTL, KC_ENT),
-  TD(TD_LSFT), GUI_T(KC_Z)     , KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  TD(TD_SLSH), TD(TD_QUOT_SHIFT),
-  KC_LALT      , SH_TT         , KC_LEAD , GUI_T(KC_GRV), TD(TD_LOWER), LT(_SPACEFN, KC_SPC), TD(TD_RAISE),   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+  SH_T(KC_TAB)   , KC_Q        , KC_W    , KC_E          , KC_R         , KC_T        , KC_Y    , KC_U         , KC_I    , KC_O    , KC_P        , KC_BSPC           ,
+  LCTL_T(KC_ESC) , LT(_MOUSE_L , KC_A)   , LT(_FNKEYS    , KC_S)        , KC_D        , KC_F    , KC_G         , KC_H    , KC_J    , KC_K        , KC_L              , TD(TD_SCLN) , MT(MOD_RCTL , KC_ENT) ,
+  TD(TD_LSFT)    , GUI_T(KC_Z) , KC_X    , KC_C          , KC_V         , KC_B        , KC_N    , KC_M         , TH_COMM , TH_DOT  , TD(TD_SLSH) , TD(TD_QUOT_SHIFT) ,
+  KC_LALT        , SH_TT       , KC_LEAD , GUI_T(KC_GRV) , TD(TD_LOWER) , LT(_SPACEFN , KC_SPC) , TD(TD_RAISE) , KC_LEFT , KC_DOWN , KC_UP       , KC_RGHT
 ),
 
 /* Mouse
@@ -263,6 +272,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   float plover_gb_song[][2]  = SONG(PLOVER_GOODBYE_SOUND);
 #endif
 
+typedef struct {
+    bool is_pressed;
+    uint16_t timer;
+    uint16_t kc_tap;
+    uint16_t kc_hold;
+} tap_hold_t;
+
+static tap_hold_t th_events[] = {
+    { .is_pressed = false, .timer = 0, .kc_tap = KC_COMM,    .kc_hold = KC_MINS  }, // TH_COMM
+    { .is_pressed = false, .timer = 0, .kc_tap = KC_DOT ,    .kc_hold = KC_EQL   }, // TH_EQL
+};
+
+void taphold_tapped(uint8_t index, bool pressed) {
+    if (index > TH_EVENTS_COUNT) { return; }
+
+    tap_hold_t *th_event = &th_events[index];
+
+    if (pressed) {
+        th_event->timer = timer_read();
+        th_event->is_pressed = true;
+    } else if (th_event->is_pressed) {
+        register_code(th_event->kc_tap);
+        unregister_code(th_event->kc_tap);
+        th_event->is_pressed = false;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case QWERTY:
@@ -348,6 +384,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
+        case TH_COMM ... TH_DOT:
+            taphold_tapped(keycode - TH_COMM, record->event.pressed);
+            return false;
     }
     return true;
 }
@@ -814,6 +853,15 @@ const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
 LEADER_EXTERNS();
 
 void matrix_scan_user(void) {
+    for (uint8_t index = 0 ; index <= TH_EVENTS_COUNT ; ++index ) {
+        tap_hold_t *th_event = &th_events[index];
+        if ( th_event->is_pressed && timer_elapsed(th_event->timer) > LONGPRESS_DELAY) {
+            register_code(th_event->kc_hold);
+            unregister_code(th_event->kc_hold);
+            th_event->is_pressed = false;
+        }
+    }
+
     LEADER_DICTIONARY() {
         leading = false;
         leader_end();
