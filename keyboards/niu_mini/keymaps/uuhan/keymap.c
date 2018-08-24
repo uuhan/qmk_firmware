@@ -39,22 +39,27 @@ enum layers {
 };
 
 enum keycodes {
-  // TH
-  TH_COMM = SAFE_RANGE,
-  TH_DOT,
-  //  TH
+    // TH
+    TH_COMM = SAFE_RANGE,
+    TH_DOT,
+    //  TH
 
-  QWERTY,
-  SPACEFN,
-  FNKEYS,
-  DVORAK,
-  MOUSE,
-  PLOVER,
-  LOWER,
-  RAISE,
-  BACKLIT,
-  EXT_PLV
+    QWERTY,
+    SPACEFN,
+    FNKEYS,
+    DVORAK,
+    MOUSE,
+    PLOVER,
+    LOWER,
+    RAISE,
+    BACKLIT,
+    EXT_PLV,
+
+    // dynamic macros
+    DYNAMIC_MACRO_RANGE,
 };
+
+#include "dynamic_macro.h"
 
 // tap-hold settings
 #define LONGPRESS_DELAY 180
@@ -105,10 +110,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_mit(
-  SH_T(KC_TAB)   , KC_Q        , KC_W    , KC_E          , KC_R         , KC_T        , KC_Y    , KC_U         , KC_I    , KC_O    , KC_P        , KC_BSPC           ,
-  LCTL_T(KC_ESC) , LT(_MOUSE_L , KC_A)   , LT(_FNKEYS    , KC_S)        , KC_D        , KC_F    , KC_G         , KC_H    , KC_J    , KC_K        , KC_L              , TD(TD_SCLN) , MT(MOD_RCTL , KC_ENT) ,
-  TD(TD_LSFT)    , GUI_T(KC_Z) , KC_X    , KC_C          , KC_V         , KC_B        , KC_N    , KC_M         , TH_COMM , TH_DOT  , TD(TD_SLSH) , TD(TD_QUOT_SHIFT) ,
-  KC_LALT        , SH_TT       , KC_LEAD , GUI_T(KC_GRV) , TD(TD_LOWER) , LT(_SPACEFN , KC_SPC) , TD(TD_RAISE) , KC_LEFT , KC_DOWN , KC_UP       , KC_RGHT
+  SH_T(KC_TAB)   , KC_Q        , KC_W        , KC_E          , KC_R         , KC_T        , KC_Y    , KC_U         , KC_I    , KC_O    , KC_P        , KC_BSPC           ,
+  LCTL_T(KC_ESC) , LT(_MOUSE_L , KC_A)       , LT(_FNKEYS    , KC_S)        , KC_D        , KC_F    , KC_G         , KC_H    , KC_J    , KC_K        , KC_L              , TD(TD_SCLN) , MT(MOD_RCTL , KC_ENT) ,
+  TD(TD_LSFT)    , GUI_T(KC_Z) , KC_X        , KC_C          , KC_V         , KC_B        , KC_N    , KC_M         , TH_COMM , TH_DOT  , TD(TD_SLSH) , TD(TD_QUOT_SHIFT) ,
+  KC_LALT        , SH_TT       , DYN_REC_STOP, GUI_T(KC_GRV) , TD(TD_LOWER) , LT(_SPACEFN , KC_SPC) , TD(TD_RAISE) , DYN_MACRO_PLAY1, DYN_MACRO_PLAY2, DYN_REC_START1, DYN_REC_START2
 ),
 
 /* Mouse
@@ -137,10 +142,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_SPACEFN] = LAYOUT_planck_mit(
-  KC_BSPC, KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , KC_GRV , KC_HOME, KC_PGUP, KC_PGDN, KC_END, KC_TAB,
-  GUI_T(KC_ENT) , KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSLS, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, TD(TD_QUOT), KC_ESC,
-  KC_LSFT, KC_RPRN, KC_LCBR, KC_RCBR, KC_BSLS, KC_UNDS, KC_PLUS, KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_TRNS,
-  KC_LCTL, KC_LGUI, KC_LALT, BACKLIT, LOWER  ,     _______     , RAISE  , KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT
+  KC_BSPC      , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , KC_GRV , KC_UNDS, KC_PLUS , KC_PIPE , KC_TILD    , DYN_REC_STOP,
+  GUI_T(KC_ENT), KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSLS, _______, KC_MINS, KC_EQL  , KC_BSLS , TD(TD_QUOT), KC_ESC  ,
+  KC_LSFT      , KC_RPRN, KC_LCBR, KC_RCBR, KC_BSLS, KC_UNDS, KC_PLUS, KC_HOME, KC_PGUP , KC_PGDN , KC_END     , KC_TRNS ,
+  KC_LCTL      , KC_LGUI, KC_LALT, BACKLIT, LOWER  , _______, RAISE  , KC_LEFT, KC_DOWN , KC_UP   , KC_RGHT
 ),
 
 [_MIRROR] = LAYOUT_planck_mit(
@@ -206,7 +211,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_RAISE] = LAYOUT_planck_mit(
   _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,
-  KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_TILD,
+  KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL , KC_BSLS, KC_GRV , KC_TRNS,
   _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, KC_LT  , KC_GT  , KC_PIPE, KC_DQUO,
   _______, _______, _______, _______, LOWER ,     _______,      _______, KC_HOME, KC_PGDN, KC_PGUP,  KC_END
 ),
@@ -302,6 +307,10 @@ void taphold_tapped(uint8_t index, bool pressed) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    uint16_t macro_kc = (keycode == MO(_RAISE) ? DYN_REC_STOP : keycode);
+    if (!process_record_dynamic_macro(macro_kc, record)) {
+        return false;
+    }
     switch (keycode) {
         case QWERTY:
             if (record->event.pressed) {
@@ -869,22 +878,5 @@ void matrix_scan_user(void) {
     LEADER_DICTIONARY() {
         leading = false;
         leader_end();
-
-        // Firefox Keyshots
-        SEQ_ONE_KEY(KC_Q) {
-            SEND_STRING(SS_LALT(SS_LGUI("c")));
-        }
-        SEQ_ONE_KEY(KC_W) {
-            SEND_STRING(SS_LALT(SS_LGUI("k")));
-        }
-        SEQ_ONE_KEY(KC_E) {
-            SEND_STRING(SS_LALT(SS_LGUI("e")));
-        }
-        SEQ_ONE_KEY(KC_R) {
-            SEND_STRING(SS_LSFT(SS_TAP(X_F9)));
-        }
-        SEQ_ONE_KEY(KC_I) {
-            SEND_STRING("xuminhui189@gmail.com");
-        }
     }
 }
