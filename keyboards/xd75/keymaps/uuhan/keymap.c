@@ -32,10 +32,6 @@ extern keymap_config_t keymap_config;
 #define MM_0 DYN_MACRO_PLAY1
 #define MM_1 DYN_MACRO_PLAY2
 
-// tap-hold settings
-#define LONGPRESS_DELAY 250
-#define TH_EVENTS_COUNT 13
-
 enum layers {
     LAYER_QWERTY,
     LAYER_MOUSE_L,
@@ -61,22 +57,32 @@ enum my_keycods {
     TH_F8,
     TH_F9,
     TH_F10,
+
+    TH_COMM,
+    TH_DOT,
+
     TH_LAST,
+
     MM_2,
     DM_CLEAR,
     DYNAMIC_MACRO_RANGE,
 };
+
+// tap-hold settings
+#define LONGPRESS_DELAY 250
+static const int TH_EVENTS_COUNT = TH_LAST - TH_M0;
+
 
 #include "dynamic_macro.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_QWERTY] = KEYMAP(
-    ALT_T(KC_ESC), TH_F1                   , TH_F2                 , TH_F3      , TH_F4               , TH_F5                    , MM_0   , SH_TT  , MM_1   , TH_F6 , TH_F7 , TH_F8  , TH_F9 , TH_F10                    , KC_BSLS              ,
-    GUI_T(KC_TAB), KC_Q                    , KC_W                  , KC_E       , KC_R                , KC_T                     , KC_MINS, KC_BSLS, KC_EQL , KC_Y  , KC_U  , KC_I   , KC_O  , KC_P                      , KC_BSPC              ,
-    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FNKEYS, KC_S), KC_D       , KC_F                , KC_G                     , _____  , _____  , KC_HOME, KC_H  , KC_J  , KC_K   , KC_L  , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
-    KC_LSFT      , GUI_T(KC_Z)             , CTL_T(KC_X)           , ALT_T(KC_C), KC_V                , KC_B                     , KC_PGUP, KC_PGDN, KC_END , KC_N  , KC_M  , KC_COMM, KC_DOT, KC_SLSH                   , MT(MOD_RSFT, KC_QUOT),
-    KC_LALT      , _____                   , _____                 , MOD_LALT   , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_BSPC, KC_ENT , KC_BSPC, KC_ENT, _____ , _____  , _____ , _____                     , _____
+    ALT_T(KC_ESC), TH_F1                   , TH_F2                 , TH_F3      , TH_F4               , TH_F5                    , MM_0           , SH_TT       , MM_1           , TH_F6 , TH_F7 , TH_F8  , TH_F9 , TH_F10                    , KC_BSLS              ,
+    GUI_T(KC_TAB), KC_Q                    , KC_W                  , KC_E       , KC_R                , KC_T                     , KC_MINS        , KC_BSLS     , KC_EQL         , KC_Y  , KC_U  , KC_I   , KC_O  , KC_P                      , KC_BSPC              ,
+    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FNKEYS, KC_S), KC_D       , KC_F                , KC_G                     , DYN_MACRO_PLAY1, _____       , DYN_MACRO_PLAY2, KC_H  , KC_J  , KC_K   , KC_L  , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
+    KC_LSFT      , GUI_T(KC_Z)             , CTL_T(KC_X)           , ALT_T(KC_C), KC_V                , KC_B                     , DYN_REC_START1 , DYN_REC_STOP, DYN_REC_START2 , KC_N  , KC_M  , TH_COMM, TH_DOT, KC_SLSH                   , MT(MOD_RSFT, KC_QUOT),
+    KC_LALT      , _____                   , _____                 , MOD_LALT   , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_BSPC        , KC_ENT      , KC_BSPC        , KC_ENT, _____ , _____  , _____ , _____                     , _____
   ),
 
   [LAYER_MOUSE_L] = KEYMAP(
@@ -199,7 +205,10 @@ static tap_hold_t th_events[] = {
     { .is_pressed = false, .timer = 0, .kc_tap = KC_7, .kc_hold = KC_F7 }, // TH_F7
     { .is_pressed = false, .timer = 0, .kc_tap = KC_8, .kc_hold = KC_F8 }, // TH_F8
     { .is_pressed = false, .timer = 0, .kc_tap = KC_9, .kc_hold = KC_F9 }, // TH_F9
-    { .is_pressed = false, .timer = 0, .kc_tap = KC_0, .kc_hold = KC_F10 } // TH_F10
+    { .is_pressed = false, .timer = 0, .kc_tap = KC_0, .kc_hold = KC_F10}, // TH_F10
+
+    { .is_pressed = false, .timer = 0, .kc_tap = KC_COMM, .kc_hold = KC_MINS}, // TH_MINS
+    { .is_pressed = false, .timer = 0, .kc_tap = KC_DOT , .kc_hold = KC_EQL }, // TH_DOT
 };
 
 void taphold_tapped(uint8_t index, bool pressed) {
