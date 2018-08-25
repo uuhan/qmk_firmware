@@ -619,8 +619,14 @@ void lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_lsft_state.state = cur_dance(state);
   switch (xtap_lsft_state.state) {
     case SINGLE_TAP:
-        // xtap_lsft_state.timestamp = state->timer;
-        register_code(KC_LSFT);
+        if (!state->interrupted) {
+            register_code(KC_LCTL);
+            register_code(KC_SPC);
+            unregister_code(KC_SPC);
+            unregister_code(KC_LCTL);
+        } else {
+            register_code(KC_LSFT);
+        }
         break;
     case SINGLE_HOLD:
         register_code(KC_LSFT);
@@ -647,12 +653,6 @@ void lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
 void lsft_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_lsft_state.state) {
     case SINGLE_TAP:
-        if (!state->interrupted) {
-            register_code(KC_LCTL);
-            register_code(KC_SPC);
-            unregister_code(KC_SPC);
-            unregister_code(KC_LCTL);
-        }
         unregister_code(KC_LSFT);
         break;
     case SINGLE_HOLD:
