@@ -84,11 +84,11 @@ static const int TH_EVENTS_COUNT = TH_LAST - TH_M0;
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_QWERTY] = KEYMAP(
-    ALT_T(KC_ESC), TH_F1                   , TH_F2             , TH_F3          , TH_F4       , TH_F5                    , MM_0           , SH_TT       , MM_1          , TH_F6 , TH_F7  , TH_F8  , TH_F9  , TH_F10                    , DYN_MACRO_PLAY1      ,
-    GUI_T(KC_TAB), KC_Q                    , KC_W              , KC_E           , KC_R        , KC_T                     , KC_MINS        , KC_BSLS     , KC_EQL        , KC_Y  , KC_U   , KC_I   , KC_O   , KC_P                      , KC_BSPC              ,
-    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FN, KC_S), KC_D           , KC_F        , KC_G                     , KC_QUOT        , _____       , KC_DQUO       , KC_H  , KC_J   , KC_K   , KC_L   , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
-    OSM(MOD_LSFT), GUI_T(KC_Z)             , CTL_T(KC_X)       , ALT_T(KC_C)    , KC_V        , KC_B                     , DYN_REC_START1, DYN_REC_STOP, DYN_MACRO_PLAY1, KC_N  , KC_M   , KC_COMM, KC_DOT , RGUI_T(KC_SLSH)           , MT(MOD_RSFT, KC_QUOT),
-    KC_LALT      , MO(LAYER_MACRO)         , DYN_REC_START1    , DYN_MACRO_PLAY1, SH_T(KC_TAB), TD(TD_SPACE)             , KC_ENT         , KC_BSPC     , KC_SPC        , KC_ENT, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC                   , _____
+    ALT_T(KC_ESC), TH_F1                   , TH_F2             , TH_F3          , TH_F4       , TH_F5                    , MM_0           , SH_TT       , MM_1          , TH_F6 , TH_F7        , TH_F8  , TH_F9  , TH_F10                    , DYN_MACRO_PLAY1      ,
+    GUI_T(KC_TAB), KC_Q                    , KC_W              , KC_E           , KC_R        , KC_T                     , KC_MINS        , KC_BSLS     , KC_EQL        , KC_Y  , KC_U         , KC_I   , KC_O   , KC_P                      , KC_BSPC              ,
+    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FN, KC_S), KC_D           , KC_F        , KC_G                     , KC_QUOT        , _____       , KC_DQUO       , KC_H  , KC_J         , KC_K   , KC_L   , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
+    OSM(MOD_LSFT), GUI_T(KC_Z)             , CTL_T(KC_X)       , ALT_T(KC_C)    , KC_V        , KC_B                     , DYN_REC_START1, DYN_REC_STOP, DYN_MACRO_PLAY1, KC_N  , KC_M         , KC_COMM, KC_DOT , RGUI_T(KC_SLSH)           , MT(MOD_RSFT, KC_QUOT),
+    KC_LALT      , MO(LAYER_MACRO)         , DYN_REC_START1    , DYN_MACRO_PLAY1, SH_T(KC_TAB), TD(TD_SPACE)             , KC_ENT         , KC_BSPC     , KC_SPC        , KC_ENT, SH_T(KC_MINS), KC_EQL , KC_LBRC, KC_RBRC                   , _____
   ),
 
   [LAYER_MACRO] = KEYMAP(
