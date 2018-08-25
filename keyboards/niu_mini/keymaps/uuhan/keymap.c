@@ -23,8 +23,14 @@
 
 extern keymap_config_t keymap_config;
 
+void send_keycode(uint8_t kc){
+    register_code(kc);
+    unregister_code(kc);
+}
+
 enum layers {
   _QWERTY,
+  _MACRO,
   _MOUSE_L,
   _MOUSE_R,
   _SPACEFN,
@@ -85,7 +91,7 @@ enum {
     TD_COMM,
     TD_DOT,
     TD_QUOT_SHIFT,
-    TD_LSFT,
+    TD_SPACE,
     TD_LOWER,
     TD_RAISE,
 };
@@ -110,23 +116,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_mit(
-  SH_T(KC_TAB)   , KC_Q        , KC_W        , KC_E          , KC_R         , KC_T        , KC_Y    , KC_U         , KC_I    , KC_O    , KC_P        , KC_BSPC           ,
-  LCTL_T(KC_ESC) , LT(_MOUSE_L , KC_A)       , LT(_FNKEYS    , KC_S)        , KC_D        , KC_F    , KC_G         , KC_H    , KC_J    , KC_K        , KC_L              , TD(TD_SCLN) , MT(MOD_RCTL , KC_ENT) ,
-  TD(TD_LSFT)    , GUI_T(KC_Z) , KC_X        , KC_C          , KC_V         , KC_B        , KC_N    , KC_M         , TH_COMM , TH_DOT  , TD(TD_SLSH) , TD(TD_QUOT_SHIFT) ,
-  KC_LALT        , SH_TT       , DYN_REC_STOP, GUI_T(KC_GRV) , TD(TD_LOWER) , LT(_SPACEFN , KC_SPC) , TD(TD_RAISE) , DYN_MACRO_PLAY1, DYN_MACRO_PLAY2, DYN_REC_START1, DYN_REC_START2
+  SH_T(KC_TAB)   , KC_Q              , KC_W             , KC_E       , KC_R, KC_T, KC_Y, KC_U, KC_I   , KC_O  , KC_P       , KC_BSPC              ,
+  LCTL_T(KC_ESC) , LT(_MOUSE_L, KC_A), LT(_FNKEYS, KC_S), KC_D       , KC_F, KC_G, KC_H, KC_J, KC_K   , KC_L  , TD(TD_SCLN), MT(MOD_RCTL , KC_ENT),
+  OSM(MOD_LSFT)  , GUI_T(KC_Z)       , CTL_T(KC_X)      , ALT_T(KC_C), KC_V, KC_B, KC_N, KC_M, TH_COMM, TH_DOT, TD(TD_SLSH), TD(TD_QUOT_SHIFT)    ,
+  KC_LALT        , MO(_MACRO)        , SH_TT            , GUI_T(KC_GRV), TD(TD_LOWER), TD(TD_SPACE), TD(TD_RAISE), KC_MINS, KC_EQL, DYN_MACRO_PLAY2, DYN_MACRO_PLAY1
 ),
 
-/* Mouse
- * ,---------------------------------------------------------------------------------------|
- * | Tab  |   Q  |   W  | MS_U |   R  | MOD_LGUI |   Y  |   U  |   I  |   O  |   P  | Bksp |
- * |------+------+------+------+------+----------+------+------+------+------+------|------|
- * | LCTL | TRNS | MS_L | MS_D | MS_L | MOD_LCTL |   H  |   J  |   K  |   L  | ACL0 | ACL2 |
- * |------+------+------+------+------+----------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  | MOD_LALT |   N  |   M  |   ,  |   .  |   /  |Enter |
- * |------+------+------+------+------+----------+------+------+------+------+------+------|
- * | Ctrl | Alt  | GUI  |Brite |Lower |    Space    |Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
- */
+[_MACRO] = LAYOUT_planck_mit(
+    _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
+    _______, RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, _______, _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
+    _______, BL_TOGG, BL_STEP, _______, _______, _______, _______, DYN_REC_START1, DYN_REC_STOP, DYN_REC_START2, _______, _______,
+    _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______
+),
+
 [_MOUSE_L] = LAYOUT_planck_mit(
   TO(_ADJUST), KC_Q   , KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
   KC_LCTL    , KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL  , KC_BSPC, KC_BTN1, KC_BTN3, KC_BTN2, KC_ACL0, KC_ACL1,
@@ -142,9 +144,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_SPACEFN] = LAYOUT_planck_mit(
-  KC_BSPC      , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , KC_GRV , KC_UNDS, KC_PLUS , KC_PIPE , KC_TILD    , DYN_REC_STOP,
-  GUI_T(KC_ENT), KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSLS, _______, KC_MINS, KC_EQL  , KC_BSLS , TD(TD_QUOT), KC_ESC  ,
-  KC_LSFT      , KC_RPRN, KC_LCBR, KC_RCBR, KC_BSLS, KC_UNDS, KC_PLUS, KC_HOME, KC_PGUP , KC_PGDN , KC_END     , KC_TRNS ,
+  KC_BSPC      , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , KC_GRV , KC_UNDS, KC_PLUS , KC_PIPE , KC_TILD    , KC_ESC ,
+  GUI_T(KC_ENT), KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSLS, _______, KC_MINS, KC_EQL  , KC_BSLS , TD(TD_QUOT), _______,
+  KC_LSFT      , KC_RPRN, KC_LCBR, KC_RCBR, KC_BSLS, KC_UNDS, KC_PLUS, KC_HOME, KC_PGUP , KC_PGDN , KC_END     , KC_TRNS,
   KC_LCTL      , KC_LGUI, KC_LALT, BACKLIT, LOWER  , _______, RAISE  , KC_LEFT, KC_DOWN , KC_UP   , KC_RGHT
 ),
 
@@ -444,7 +446,7 @@ static xtap xtap_slsh_state = {
   .state = 0
 };
 
-static xtap xtap_lsft_state = {
+static xtap xtap_space_state = {
   .is_press_action = true,
   .is_keeping = false,
   .state = 0
@@ -615,58 +617,52 @@ void slsh_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_slsh_state.state = 0;
 }
 
-void lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
-  xtap_lsft_state.state = cur_dance(state);
-  switch (xtap_lsft_state.state) {
+void space_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_space_state.state = cur_dance(state);
+  switch (xtap_space_state.state) {
     case SINGLE_TAP:
+        send_keycode(KC_SPC);
+        break;
+    case SINGLE_HOLD:
+        layer_on(_SPACEFN);
+        break;
+    case DOUBLE_TAP:
         if (!state->interrupted) {
             register_code(KC_LCTL);
             register_code(KC_SPC);
             unregister_code(KC_SPC);
             unregister_code(KC_LCTL);
         } else {
-            register_code(KC_LSFT);
-        }
-        break;
-    case SINGLE_HOLD:
-        register_code(KC_LSFT);
-        break;
-    case DOUBLE_TAP:
-        if (xtap_lsft_state.is_keeping) {
-            xtap_lsft_state.is_keeping = false;
-            unregister_code(KC_LSFT);
-        } else {
-            xtap_lsft_state.is_keeping = true;
-            register_code(KC_LSFT);
+            send_keycode(KC_SPC);
+            send_keycode(KC_SPC);
         }
         break;
     case DOUBLE_HOLD:
-        register_code(KC_LSFT);
+        register_code(KC_SPC);
         break;
     case DOUBLE_SINGLE_TAP:
-        register_code(KC_LSFT);
-        unregister_code(KC_LSFT);
-        register_code(KC_LSFT);
+        register_code(KC_SPC);
+        unregister_code(KC_SPC);
+        register_code(KC_SPC);
   }
 }
 
-void lsft_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_lsft_state.state) {
+void space_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_space_state.state) {
     case SINGLE_TAP:
-        unregister_code(KC_LSFT);
         break;
     case SINGLE_HOLD:
-        unregister_code(KC_LSFT);
+        layer_off(_SPACEFN);
         break;
     case DOUBLE_TAP:
         break;
     case DOUBLE_HOLD:
-        unregister_code(KC_LSFT);
+        unregister_code(KC_SPC);
         break;
     case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_LSFT);
+        unregister_code(KC_SPC);
   }
-  xtap_lsft_state.state = 0;
+  xtap_space_state.state = 0;
 }
 
 void quot_finished (qk_tap_dance_state_t *state, void *user_data) {
@@ -717,7 +713,7 @@ void quot_reset (qk_tap_dance_state_t *state, void *user_data) {
 void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_lower_state.state = cur_dance(state);
   uint8_t lctl_mask = get_mods() & (MOD_BIT(KC_LCTL));
-  uint8_t lsft_mask = get_mods() & (MOD_BIT(KC_LSFT));
+  uint8_t space_mask = get_mods() & (MOD_BIT(KC_LSFT));
   switch (xtap_lower_state.state) {
     case SINGLE_TAP:
         if (state->interrupted) {
@@ -731,7 +727,7 @@ void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
         if (lctl_mask) {
             layer_on(_MIRROR);
             return;
-        } if (lsft_mask) {
+        } if (space_mask) {
             del_mods(MOD_BIT(KC_LSFT));
             layer_on(_MIRROR);
             return;
@@ -844,7 +840,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_SLSH]       = ACTION_TAP_DANCE_FN_ADVANCED(NULL,slsh_finished,slsh_reset),
     [TD_PIPE]       = ACTION_TAP_DANCE_DOUBLE(KC_PIPE, KC_BSLS),
     [TD_QUOT]       = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
-    [TD_LSFT]       = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lsft_finished,lsft_reset),
+    [TD_SPACE]      = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
     [TD_LOWER]      = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lower_finished,lower_reset),
     [TD_RAISE]      = ACTION_TAP_DANCE_FN_ADVANCED(NULL,raise_finished,raise_reset),
     [TD_QUOT_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,quot_finished,quot_reset),
