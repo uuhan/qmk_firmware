@@ -217,7 +217,18 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
         }
         break;
     case DOUBLE_TAP:
-        register_code(KC_ENT);
+        if (!state->interrupted) {
+            register_code(KC_LCTL);
+            register_code(KC_SPC);
+            unregister_code(KC_SPC);
+            unregister_code(KC_LCTL);
+
+        } else {
+            register_code(KC_SPC);
+            unregister_code(KC_SPC);
+            register_code(KC_SPC);
+            unregister_code(KC_SPC);
+        }
         break;
     case DOUBLE_HOLD:
         register_code(KC_LGUI);
@@ -242,7 +253,6 @@ void space_reset (qk_tap_dance_state_t *state, void *user_data) {
         }
         break;
     case DOUBLE_TAP:
-        unregister_code(KC_ENT);
         break;
     case DOUBLE_HOLD:
         unregister_code(KC_LGUI);
