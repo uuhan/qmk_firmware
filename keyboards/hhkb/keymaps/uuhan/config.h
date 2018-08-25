@@ -13,12 +13,13 @@
 #define MOUSEKEY_TIME_TO_MAX    5
 #define MOUSEKEY_WHEEL_DELAY    0
 
-#define LEADER_TIMEOUT 800
-
 #ifdef TAPPING_TERM
   #undef TAPPING_TERM
   #define TAPPING_TERM 200
 #endif
+
+#define ONESHOT_TAP_TOGGLE 1  /* Tapping this number of times holds the key until tapped this number of times again. */
+#define ONESHOT_TIMEOUT 0  /* Time (in ms) before the one shot key is released */
 
 // Disable MACRO support to shrink size
 #define NO_ACTION_MACRO
