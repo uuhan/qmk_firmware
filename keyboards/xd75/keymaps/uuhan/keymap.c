@@ -63,6 +63,10 @@ enum my_keycods {
     DYNAMIC_MACRO_RANGE,
 };
 
+enum {
+    CLICK = 0,
+};
+
 // tap-hold settings
 #define LONGPRESS_DELAY 250
 static const int TH_EVENTS_COUNT = TH_LAST - TH_M0;
@@ -77,15 +81,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     GUI_T(KC_TAB), KC_Q                    , KC_W              , KC_E       , KC_R                , KC_T                     , KC_MINS        , KC_BSLS     , KC_EQL         , KC_Y  , KC_U  , KC_I   , KC_O  , KC_P                      , KC_BSPC              ,
     CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FN, KC_S), KC_D       , KC_F                , KC_G                     , DYN_MACRO_PLAY1, _____       , DYN_MACRO_PLAY2, KC_H  , KC_J  , KC_K   , KC_L  , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
     KC_LSFT      , GUI_T(KC_Z)             , CTL_T(KC_X)       , ALT_T(KC_C), KC_V                , KC_B                     , DYN_REC_START1 , DYN_REC_STOP, DYN_REC_START2 , KC_N  , KC_M  , TH_COMM, TH_DOT, KC_SLSH                   , MT(MOD_RSFT, KC_QUOT),
-    KC_LALT      , KC_LGUI                 , KC_LGUI           , KC_LGUI    , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_BSPC        , KC_ENT      , KC_BSPC        , KC_ENT, _____ , _____  , _____ , _____                     , _____
+    KC_LALT      , KC_LGUI                 , KC_LGUI           , KC_LGUI    , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_ENT         , KC_BSPC     , KC_SPC         , KC_ENT, _____ , _____  , _____ , _____                     , _____
   ),
 
   [LAYER_MOUSE_L] = KEYMAP(
-    _____, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, _____  , _____  , _____, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
-    _____, KC_Q   , KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI, _____  , _____  , _____, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , _____  ,
-    _____, _____  , KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL, _____  , _____  , _____, KC_H   , KC_BTN1, KC_BTN3, KC_BTN2, KC_ACL0, KC_ACL2,
-    _____, KC_Z   , KC_X   , KC_C   , KC_V   , KC_LALT, _____  , _____  , _____, KC_N   , KC_M   , _____  , _____  , _____  , _____  ,
-    _____, _____  , _____  , _____  , KC_BTN2, KC_BTN1, KC_BTN3, _____  , _____, _____  , _____  , _____  , _____  , _____  , _____
+    _____, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC  , _____  , _____  , _____, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
+    _____, KC_Q   , KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI  , _____  , _____  , _____, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , _____  ,
+    _____, _____  , KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL  , _____  , _____  , _____, KC_H   , KC_BTN1, KC_BTN3, KC_BTN2, KC_ACL0, KC_ACL2,
+    _____, KC_Z   , KC_X   , KC_C   , KC_V   , KC_LALT  , _____  , _____  , _____, KC_N   , KC_M   , _____  , _____  , _____  , _____  ,
+    _____, _____  , _____  , _____  , KC_BTN2, TD(CLICK), KC_BTN3, _____  , _____, _____  , _____  , _____  , _____  , _____  , _____
   ),
 
   [LAYER_MOUSE_R] = KEYMAP(
@@ -126,24 +130,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     TH_M0,  TH_M1,  TH_M2, OSALT, OSGUI, _____ , KC_SPC,  _____ ,  KC_PGDN, MMENU, KC_ESC, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
   ),
 
-/* FN LAYER - change layouts and start recording a macro
- * .--------------------------------------------------------------------------------------------------------------------------------------.
- * | COLEMAK| QWERTY |        |        |        |        | REC 1  | REC 2  |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------|
- * |        |        |        |        |        |        |        | ------ |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+--------|
- * |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------------------------+--------|
- * |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+-----------------+--------+--------|
- * |        |        |        |        | RESET  |         DM_CLEAR         |        |        | RESET  |        |        |        |        |
- * '--------------------------------------------------------------------------------------------------------------------------------------'
- */
-
   [LAYER_FN] = KEYMAP(
     RESET, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, _____ , _____, _____  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
     _____, _____  , KC_HOME, KC_PGUP, KC_PGDN, KC_END , _____ , _____, _____  , KC_RGUI, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, _____  ,
-    _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , KC_RCTL, KC_MINS, KC_EQL , KC_BSLS, KC_GRV , _____  ,
+    _____, _____  , _____  , KC_BSPC, KC_DEL , _____  , _____ , _____, _____  , KC_RCTL, KC_MINS, KC_EQL , KC_BSLS, KC_GRV , _____  ,
     _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , KC_RALT, _____  , _____  , _____  , _____  , _____  ,
     _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , _____  , _____  , _____  , _____  , _____  , _____
   ),
@@ -218,9 +208,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-qk_tap_dance_action_t tap_dance_actions[] = {
-};
-
 const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
   {{14, 0}, {13, 0}, {12, 0}, {11, 0}, {10, 0}, {9, 0}, {8, 0}, {7, 0}, {6, 0}, {5, 0}, {4, 0}, {3, 0}, {2, 0}, {1, 0}, {0, 0}},
   {{14, 1}, {13, 1}, {12, 1}, {11, 1}, {10, 1}, {9, 1}, {8, 1}, {7, 1}, {6, 1}, {5, 1}, {4, 1}, {3, 1}, {2, 1}, {1, 1}, {0, 1}},
@@ -229,3 +216,105 @@ const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
   {{14, 4}, {13, 4}, {12, 4}, {11, 4}, {10, 4}, {9, 4}, {8, 4}, {7, 4}, {6, 4}, {5, 4}, {4, 4}, {3, 4}, {2, 4}, {1, 4}, {0, 4}},
 };
 
+enum {
+    SINGLE_TAP = 1,
+    SINGLE_HOLD = 2,
+    DOUBLE_TAP = 3,
+    DOUBLE_HOLD = 4,
+    DOUBLE_SINGLE_TAP = 5, //send two single taps
+    TRIPLE_TAP = 6,
+    TRIPLE_HOLD = 7
+};
+
+typedef struct {
+    bool is_press_action;
+    bool is_keeping;
+    int state;
+} xtap;
+
+int cur_dance (qk_tap_dance_state_t *state) {
+  if (state->count == 1) {
+    if (state->interrupted || !state->pressed)  return SINGLE_TAP;
+    //key has not been interrupted, but they key is still held. Means you want to send a 'HOLD'.
+    else return SINGLE_HOLD;
+  }
+  else if (state->count == 2) {
+    /*
+     * DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
+     * action when hitting 'pp'. Suggested use case for this return value is when you want to send two
+     * keystrokes of the key, and not the 'double tap' action/macro.
+    */
+    if (state->interrupted) return DOUBLE_SINGLE_TAP;
+    else if (state->pressed) return DOUBLE_HOLD;
+    else return DOUBLE_TAP;
+  }
+  //Assumes no one is trying to type the same letter three times (at least not quickly).
+  //If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
+  //an exception here to return a 'TRIPLE_SINGLE_TAP', and define that enum just like 'DOUBLE_SINGLE_TAP'
+  if (state->count == 3) {
+    if (state->interrupted || !state->pressed)  return TRIPLE_TAP;
+    else return TRIPLE_HOLD;
+  }
+  else return 8; //magic number. At some point this method will expand to work for more presses
+}
+
+static xtap xtap_cick_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+
+void click_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_cick_state.state = cur_dance(state);
+  switch (xtap_cick_state.state) {
+    case SINGLE_TAP:
+        mousekey_on(KC_BTN1);
+        break;
+    case SINGLE_HOLD:
+        mousekey_on(KC_ACL0);
+        mousekey_send();
+        break;
+    case DOUBLE_TAP:
+        mousekey_on(KC_BTN2);
+        mousekey_send();
+        break;
+    case DOUBLE_HOLD:
+        mousekey_on(KC_BTN1);
+        mousekey_send();
+        break;
+    case DOUBLE_SINGLE_TAP:
+        mousekey_on(KC_BTN1);
+        mousekey_send();
+  }
+}
+
+void click_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_cick_state.state) {
+    case SINGLE_TAP:
+        mousekey_send();
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+        break;
+    case SINGLE_HOLD:
+        mousekey_off(KC_ACL0);
+        mousekey_send();
+        break;
+    case DOUBLE_TAP:
+        mousekey_off(KC_BTN2);
+        mousekey_send();
+        break;
+    case DOUBLE_HOLD:
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+        break;
+    case DOUBLE_SINGLE_TAP:
+        mousekey_send();
+        mousekey_off(KC_BTN1);
+        mousekey_send();
+  }
+  xtap_cick_state.state = 0;
+}
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [CLICK]         = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
+};
