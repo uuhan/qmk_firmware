@@ -7,6 +7,11 @@
 
 extern keymap_config_t keymap_config;
 
+void send_keycode(uint16_t kc) {
+    register_code(kc);
+    unregister_code(kc);
+}
+
 
 #ifdef IS_COLINTA
 #include "secrets.h"
@@ -32,6 +37,7 @@ extern keymap_config_t keymap_config;
 
 enum layers {
     LAYER_QWERTY,
+    LAYER_MACRO,
     LAYER_MOUSE_L,
     LAYER_MOUSE_R,
     LAYER_SPACEFN,
@@ -65,7 +71,7 @@ enum my_keycods {
 
 enum {
     TD_CLICK = 0,
-    TD_LSFT,
+    TD_SPACE,
 };
 
 // tap-hold settings
@@ -78,11 +84,19 @@ static const int TH_EVENTS_COUNT = TH_LAST - TH_M0;
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_QWERTY] = KEYMAP(
-    ALT_T(KC_ESC), TH_F1                   , TH_F2             , TH_F3      , TH_F4               , TH_F5                    , MM_0           , SH_TT       , MM_1          , TH_F6 , TH_F7  , TH_F8  , TH_F9  , TH_F10                    , KC_BSLS              ,
-    GUI_T(KC_TAB), KC_Q                    , KC_W              , KC_E       , KC_R                , KC_T                     , KC_MINS        , KC_BSLS     , KC_EQL        , KC_Y  , KC_U   , KC_I   , KC_O   , KC_P                      , KC_BSPC              ,
-    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FN, KC_S), KC_D       , KC_F                , KC_G                     , _____          , _____       , _____         , KC_H  , KC_J   , KC_K   , KC_L   , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
-    TD(TD_LSFT)  , GUI_T(KC_Z)             , KC_X              , KC_C       , KC_V                , KC_B                     , DYN_REC_START1, DYN_REC_STOP, DYN_MACRO_PLAY1, KC_N  , KC_M   , KC_COMM, KC_DOT , RGUI_T(KC_SLSH)           , MT(MOD_RSFT, KC_QUOT),
-    KC_LALT      , KC_LGUI                 , KC_LGUI           , KC_LGUI    , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_ENT         , KC_BSPC     , KC_SPC        , KC_ENT, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC                   , _____
+    ALT_T(KC_ESC), TH_F1                   , TH_F2             , TH_F3          , TH_F4       , TH_F5                    , MM_0           , SH_TT       , MM_1          , TH_F6 , TH_F7  , TH_F8  , TH_F9  , TH_F10                    , DYN_MACRO_PLAY1      ,
+    GUI_T(KC_TAB), KC_Q                    , KC_W              , KC_E           , KC_R        , KC_T                     , KC_MINS        , KC_BSLS     , KC_EQL        , KC_Y  , KC_U   , KC_I   , KC_O   , KC_P                      , KC_BSPC              ,
+    CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FN, KC_S), KC_D           , KC_F        , KC_G                     , _____          , _____       , _____         , KC_H  , KC_J   , KC_K   , KC_L   , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
+    OSM(MOD_LSFT), GUI_T(KC_Z)             , CTL_T(KC_X)       , ALT_T(KC_C)    , KC_V        , KC_B                     , DYN_REC_START1, DYN_REC_STOP, DYN_MACRO_PLAY1, KC_N  , KC_M   , KC_COMM, KC_DOT , RGUI_T(KC_SLSH)           , MT(MOD_RSFT, KC_QUOT),
+    KC_LALT      , MO(LAYER_MACRO)         , DYN_REC_START1    , DYN_MACRO_PLAY1, SH_T(KC_TAB), TD(TD_SPACE)             , KC_ENT         , KC_BSPC     , KC_SPC        , KC_ENT, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC                   , _____
+  ),
+
+  [LAYER_MACRO] = KEYMAP(
+    RESET, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, _____ , _____, _____  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
+    _____, _____  , KC_HOME, KC_PGUP, KC_PGDN, KC_END , _____ , _____, _____  , KC_RGUI, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, _____  ,
+    _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , _____  , _____  , _____  , _____  , _____  , _____  ,
+    _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , KC_RALT, _____  , _____  , _____  , _____  , _____  ,
+    _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , _____  , _____  , _____  , _____  , _____  , _____
   ),
 
   [LAYER_MOUSE_L] = KEYMAP(
@@ -194,7 +208,8 @@ void matrix_scan_user() {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!process_record_dynamic_macro(keycode, record)) {
+    uint16_t macro_kc = (keycode == MO(LAYER_MACRO) ? DYN_REC_STOP : keycode);
+    if (!process_record_dynamic_macro(macro_kc, record)) {
         return false;
     }
 
@@ -264,7 +279,7 @@ static xtap xtap_cick_state = {
   .state = 0
 };
 
-static xtap xtap_lsft_state = {
+static xtap xtap_space_state = {
   .is_press_action = true,
   .state = 0
 };
@@ -320,61 +335,55 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_cick_state.state = 0;
 }
 
-void lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
-  xtap_lsft_state.state = cur_dance(state);
-  switch (xtap_lsft_state.state) {
+void space_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_space_state.state = cur_dance(state);
+  switch (xtap_space_state.state) {
     case SINGLE_TAP:
+        send_keycode(KC_SPC);
+        break;
+    case SINGLE_HOLD:
+        layer_on(LAYER_SPACEFN);
+        break;
+    case DOUBLE_TAP:
         if (!state->interrupted) {
             register_code(KC_LCTL);
             register_code(KC_SPC);
             unregister_code(KC_SPC);
             unregister_code(KC_LCTL);
         } else {
-            register_code(KC_LSFT);
-        }
-        break;
-    case SINGLE_HOLD:
-        register_code(KC_LSFT);
-        break;
-    case DOUBLE_TAP:
-        if (xtap_lsft_state.is_keeping) {
-            xtap_lsft_state.is_keeping = false;
-            unregister_code(KC_LSFT);
-        } else {
-            xtap_lsft_state.is_keeping = true;
-            register_code(KC_LSFT);
+            send_keycode(KC_SPC);
+            send_keycode(KC_SPC);
         }
         break;
     case DOUBLE_HOLD:
-        register_code(KC_LSFT);
+        register_code(KC_SPC);
         break;
     case DOUBLE_SINGLE_TAP:
-        register_code(KC_LSFT);
-        unregister_code(KC_LSFT);
-        register_code(KC_LSFT);
+        register_code(KC_SPC);
+        unregister_code(KC_SPC);
+        register_code(KC_SPC);
   }
 }
 
-void lsft_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_lsft_state.state) {
+void space_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_space_state.state) {
     case SINGLE_TAP:
-        unregister_code(KC_LSFT);
         break;
     case SINGLE_HOLD:
-        unregister_code(KC_LSFT);
+        layer_off(LAYER_SPACEFN);
         break;
     case DOUBLE_TAP:
         break;
     case DOUBLE_HOLD:
-        unregister_code(KC_LSFT);
+        unregister_code(KC_SPC);
         break;
     case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_LSFT);
+        unregister_code(KC_SPC);
   }
-  xtap_lsft_state.state = 0;
+  xtap_space_state.state = 0;
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
-    [TD_LSFT]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lsft_finished,lsft_reset),
+    [TD_SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
 };
