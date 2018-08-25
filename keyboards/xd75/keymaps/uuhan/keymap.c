@@ -64,7 +64,8 @@ enum my_keycods {
 };
 
 enum {
-    CLICK = 0,
+    TD_CLICK = 0,
+    TD_LSFT,
 };
 
 // tap-hold settings
@@ -80,16 +81,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ALT_T(KC_ESC), TH_F1                   , TH_F2             , TH_F3      , TH_F4               , TH_F5                    , MM_0           , SH_TT       , MM_1           , TH_F6 , TH_F7  , TH_F8  , TH_F9  , TH_F10                    , KC_BSLS              ,
     GUI_T(KC_TAB), KC_Q                    , KC_W              , KC_E       , KC_R                , KC_T                     , KC_MINS        , KC_BSLS     , KC_EQL         , KC_Y  , KC_U   , KC_I   , KC_O   , KC_P                      , KC_BSPC              ,
     CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FN, KC_S), KC_D       , KC_F                , KC_G                     , DYN_MACRO_PLAY1, _____       , DYN_MACRO_PLAY2, KC_H  , KC_J   , KC_K   , KC_L   , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
-    KC_LSFT      , GUI_T(KC_Z)             , CTL_T(KC_X)       , ALT_T(KC_C), KC_V                , KC_B                     , DYN_REC_START1 , DYN_REC_STOP, DYN_REC_START2 , KC_N  , KC_M   , TH_COMM, TH_DOT , RGUI_T(KC_SLSH)           , MT(MOD_RSFT, KC_QUOT),
+    TD(TD_LSFT)  , GUI_T(KC_Z)             , CTL_T(KC_X)       , ALT_T(KC_C), KC_V                , KC_B                     , DYN_REC_START1 , DYN_REC_STOP, DYN_REC_START2 , KC_N  , KC_M   , TH_COMM, TH_DOT , RGUI_T(KC_SLSH)           , MT(MOD_RSFT, KC_QUOT),
     KC_LALT      , KC_LGUI                 , KC_LGUI           , KC_LGUI    , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_ENT         , KC_BSPC     , KC_SPC         , KC_ENT, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC                   , _____
   ),
 
   [LAYER_MOUSE_L] = KEYMAP(
-    _____, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC  , RGB_HUD , _____  , RGB_HUI, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
-    _____, KC_Q   , KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI  , RGB_SAD , RGB_TOG, RGB_SAI, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , _____  ,
-    _____, _____  , KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL  , RGB_VAD , _____  , RGB_VAI, KC_H   , KC_BTN1, KC_BTN3, KC_BTN2, KC_ACL0, KC_ACL2,
-    _____, KC_Z   , KC_X   , KC_C   , KC_V   , KC_LALT  , RGB_RMOD, _____  , RGB_MOD, KC_N   , KC_M   , _____  , _____  , _____  , _____  ,
-    _____, _____  , _____  , _____  , KC_BTN2, TD(CLICK), KC_BTN3 , _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____
+    _____, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC     ,RGB_HUD , _____  , RGB_HUI, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
+    _____, KC_Q   , KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI     ,RGB_SAD , RGB_TOG, RGB_SAI, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , _____  ,
+    _____, _____  , KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL     ,RGB_VAD , _____  , RGB_VAI, KC_H   , KC_BTN1, KC_BTN3, KC_BTN2, KC_ACL0, KC_ACL2,
+    _____, KC_Z   , KC_X   , KC_C   , KC_V   , KC_LALT     ,RGB_RMOD, _____  , RGB_MOD, KC_N   , KC_M   , _____  , _____  , _____  , _____  ,
+    _____, _____  , _____  , _____  , KC_BTN2, TD(TD_CLICK),KC_BTN3 , _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____
   ),
 
   [LAYER_MOUSE_R] = KEYMAP(
@@ -263,6 +264,10 @@ static xtap xtap_cick_state = {
   .state = 0
 };
 
+static xtap xtap_lsft_state = {
+  .is_press_action = true,
+  .state = 0
+};
 
 void click_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_cick_state.state = cur_dance(state);
@@ -315,6 +320,61 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_cick_state.state = 0;
 }
 
+void lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_lsft_state.state = cur_dance(state);
+  switch (xtap_lsft_state.state) {
+    case SINGLE_TAP:
+        // xtap_lsft_state.timestamp = state->timer;
+        register_code(KC_LSFT);
+        break;
+    case SINGLE_HOLD:
+        register_code(KC_LSFT);
+        break;
+    case DOUBLE_TAP:
+        if (xtap_lsft_state.is_keeping) {
+            xtap_lsft_state.is_keeping = false;
+            unregister_code(KC_LSFT);
+        } else {
+            xtap_lsft_state.is_keeping = true;
+            register_code(KC_LSFT);
+        }
+        break;
+    case DOUBLE_HOLD:
+        register_code(KC_LSFT);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        register_code(KC_LSFT);
+        unregister_code(KC_LSFT);
+        register_code(KC_LSFT);
+  }
+}
+
+void lsft_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_lsft_state.state) {
+    case SINGLE_TAP:
+        if (!state->interrupted) {
+            register_code(KC_LCTL);
+            register_code(KC_SPC);
+            unregister_code(KC_SPC);
+            unregister_code(KC_LCTL);
+        }
+        unregister_code(KC_LSFT);
+        break;
+    case SINGLE_HOLD:
+        unregister_code(KC_LSFT);
+        break;
+    case DOUBLE_TAP:
+        break;
+    case DOUBLE_HOLD:
+        unregister_code(KC_LSFT);
+        break;
+    case DOUBLE_SINGLE_TAP:
+        unregister_code(KC_LSFT);
+  }
+  xtap_lsft_state.state = 0;
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [CLICK]         = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
+    [TD_CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
+    [TD_LSFT]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL,lsft_finished,lsft_reset),
 };
