@@ -39,7 +39,6 @@ enum layers {
     LAYER_SPACEFN,
     LAYER_FNKEYS,
     LAYER_COLEMAK,
-    LAYER_RECORD,
     LAYER_FN,
 };
 
@@ -139,28 +138,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     TH_M0,  TH_M1,  TH_M2, OSALT, OSGUI, _____ , KC_SPC,  _____ ,  KC_PGDN, MMENU, KC_ESC, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
   ),
 
-/* DYN_REC LAYER - recording tap/hold keys is possible, but they will always "tap" (macros don't record holding duration)
- * .--------------------------------------------------------------------------------------------------------------------------------------.
- * |        |        |        |        |        |        |  STOP  |  STOP  |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------|
- * |        |        |        |        |        |        |  STOP  |  STOP  |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+--------|
- * |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------------------------+--------|
- * |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
- * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+-----------------+--------+--------|
- * |        |        |        |        |        |                          |        |        |        |        |        |        |        |
- * '--------------------------------------------------------------------------------------------------------------------------------------'
- */
-
-  [LAYER_RECORD] = KEYMAP(
-    _____, _____, _____, _____, _____, _____, DYN_REC_STOP, DYN_REC_STOP, _____, _____, _____, _____, _____, _____, _____,
-    _____, _____, _____, _____, _____, _____, DYN_REC_STOP, DYN_REC_STOP, _____, _____, _____, _____, _____, _____, _____,
-    _____, _____, _____, _____, _____, _____,    _____,        _____,     _____, _____, _____, _____, _____, _____, _____,
-    _____, _____, _____, _____, _____, _____,    _____,        _____,     _____, _____, _____, _____, _____, _____, _____,
-    _____, _____, _____, _____, _____, _____,    _____,        _____,     _____, _____, _____, _____, _____, _____, _____
-  ),
-
 /* FN LAYER - change layouts and start recording a macro
  * .--------------------------------------------------------------------------------------------------------------------------------------.
  * | COLEMAK| QWERTY |        |        |        |        | REC 1  | REC 2  |        |        |        |        |        |        |        |
@@ -237,52 +214,17 @@ void matrix_scan_user() {
     }
 }
 
-// if the dynamic macros haven't been recorded, we send the default macro strings.
-bool did_record_m1 = false;
-bool did_record_m2 = false;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    bool try_dynamic_macro = true;
-    if ((keycode == DYN_MACRO_PLAY1 && !did_record_m1) || (keycode == DYN_MACRO_PLAY2 && !did_record_m2)) {
-        try_dynamic_macro = false;
-    }
-    else if (keycode == DM_CLEAR) {
-        try_dynamic_macro = false;
-        did_record_m1 = false;
-        did_record_m2 = false;
-    }
-
-    if (try_dynamic_macro && !process_record_dynamic_macro(keycode, record)) {
-        if (keycode == DYN_MACRO_PLAY1) {
-                did_record_m1 = true;
-        }
-
-        if (keycode == DYN_MACRO_PLAY2) {
-                did_record_m2 = true;
-        }
-
-        if (keycode == DYN_REC_START1 || keycode == DYN_REC_START2) {
-                layer_move(LAYER_RECORD);
-        }
-        else if (keycode == DYN_REC_STOP) {
-                layer_move(LAYER_COLEMAK);
-        }
-
+    if (!process_record_dynamic_macro(keycode, record)) {
         return false;
     }
 
     switch (keycode) {
-    case DYN_MACRO_PLAY1:
-        SEND_STRING(SENDSTRING_MM0);
-        return false;
-    case DYN_MACRO_PLAY2:
-        SEND_STRING(SENDSTRING_MM1);
-        return false;
-    case MM_2:
-        SEND_STRING(SENDSTRING_MM2);
-        return false;
-    case TH_M0 ... TH_LAST:
-        taphold_tapped(keycode - TH_M0, record->event.pressed);
-        return false;
+        case TH_M0 ... TH_LAST:
+            taphold_tapped(keycode - TH_M0, record->event.pressed);
+            return false;
+        default:
+            return true;
     }
 
     return true;
