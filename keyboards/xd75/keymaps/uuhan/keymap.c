@@ -16,16 +16,14 @@ extern keymap_config_t keymap_config;
 #define SENDSTRING_MM2 ""
 #endif
 
-// custom keys:
-// - goto layer keys
 #define GOTO_FN TT(LAYER_FN)
-#define GOTO_CM TO(LAYER_COLEMAK)
-#define GOTO_QW TO(LAYER_QWERTY)
+
 // - sticky keys, aka one-shot
 #define OSCTL OSM(MOD_LCTL)
 #define OSALT OSM(MOD_LALT)
 #define OSSFT OSM(MOD_LSFT)
 #define OSGUI OSM(MOD_LGUI)
+
 // "MMENU" is a macro for "CMD+SPC" (aka Spotlight/Alfred)
 #define MMENU LGUI(KC_SPC)
 #define _____ KC_TRNS
@@ -79,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     GUI_T(KC_TAB), KC_Q                    , KC_W              , KC_E       , KC_R                , KC_T                     , KC_MINS        , KC_BSLS     , KC_EQL         , KC_Y  , KC_U  , KC_I   , KC_O  , KC_P                      , KC_BSPC              ,
     CTL_T(KC_ESC), LT(LAYER_MOUSE_L, KC_A) , LT(LAYER_FN, KC_S), KC_D       , KC_F                , KC_G                     , DYN_MACRO_PLAY1, _____       , DYN_MACRO_PLAY2, KC_H  , KC_J  , KC_K   , KC_L  , LT(LAYER_MOUSE_R, KC_SCLN), RCTL_T(KC_ENT)       ,
     KC_LSFT      , GUI_T(KC_Z)             , CTL_T(KC_X)       , ALT_T(KC_C), KC_V                , KC_B                     , DYN_REC_START1 , DYN_REC_STOP, DYN_REC_START2 , KC_N  , KC_M  , TH_COMM, TH_DOT, KC_SLSH                   , MT(MOD_RSFT, KC_QUOT),
-    KC_LALT      , _____                   , _____             , MOD_LALT   , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_BSPC        , KC_ENT      , KC_BSPC        , KC_ENT, _____ , _____  , _____ , _____                     , _____
+    KC_LALT      , KC_LGUI                 , KC_LGUI           , KC_LGUI    , LT(LAYER_FN, KC_TAB), LT(LAYER_SPACEFN, KC_SPC), KC_BSPC        , KC_ENT      , KC_BSPC        , KC_ENT, _____ , _____  , _____ , _____                     , _____
   ),
 
   [LAYER_MOUSE_L] = KEYMAP(
