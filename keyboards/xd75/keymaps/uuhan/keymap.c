@@ -92,11 +92,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [LAYER_MACRO] = KEYMAP(
-    RESET, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, _____ , _____, _____  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
-    _____, _____  , KC_HOME, KC_PGUP, KC_PGDN, KC_END , _____ , _____, _____  , KC_RGUI, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, _____  ,
-    _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , _____  , _____  , _____  , _____  , _____  , _____  ,
-    _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , KC_RALT, _____  , _____  , _____  , _____  , _____  ,
-    _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , _____  , _____  , _____  , _____  , _____  , _____
+    RESET, KC_EXLM, KC_AT  , KC_HASH         , KC_DLR         , KC_PERC, _____ , _____, _____  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
+    _____, _____  , KC_HOME, KC_PGUP         , KC_PGDN        , KC_END , _____ , _____, _____  , KC_RGUI, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, _____  ,
+    _____, _____  , _____  , DYN_REC_START1  , DYN_MACRO_PLAY1, _____  , _____ , _____, _____  , _____  , _____  , _____  , _____  , _____  , _____  ,
+    _____, _____  , _____  , _____           , _____          , _____  , _____ , _____, _____  , KC_RALT, _____  , _____  , _____  , _____  , _____  ,
+    _____, _____  , _____  , _____           , _____          , _____  , _____ , _____, _____  , _____  , _____  , _____  , _____  , _____  , _____
   ),
 
   [LAYER_MOUSE_L] = KEYMAP(
