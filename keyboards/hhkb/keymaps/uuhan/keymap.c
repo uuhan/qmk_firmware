@@ -312,6 +312,7 @@ void quote_finished (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_state.state) {
     case SINGLE_TAP:
         register_code(KC_QUOT);
+        unregister_code(KC_QUOT);
         break;
     case SINGLE_HOLD:
         layer_on(MIRROR);
@@ -333,7 +334,6 @@ void quote_finished (qk_tap_dance_state_t *state, void *user_data) {
 void quote_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_state.state) {
     case SINGLE_TAP:
-        unregister_code(KC_QUOT);
         break;
     case SINGLE_HOLD:
         layer_off(MIRROR);
