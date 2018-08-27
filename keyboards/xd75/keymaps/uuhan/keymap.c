@@ -147,7 +147,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_FN] = KEYMAP(
     RESET, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, _____ , _____, _____  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
-    _____, _____  , KC_HOME, KC_PGUP, KC_PGDN, KC_END , _____ , _____, _____  , KC_RGUI, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, _____  ,
+    _____, _____  , _____  , KC_HOME, KC_PGUP, KC_PGDN, KC_END, _____, _____  , KC_RGUI, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, _____  ,
     _____, _____  , _____  , KC_BSPC, KC_DEL , _____  , _____ , _____, _____  , KC_RCTL, KC_MINS, KC_EQL , KC_BSLS, KC_GRV , _____  ,
     _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , KC_RALT, _____  , _____  , _____  , _____  , _____  ,
     _____, _____  , _____  , _____  , _____  , _____  , _____ , _____, _____  , _____  , _____  , _____  , _____  , _____  , _____
