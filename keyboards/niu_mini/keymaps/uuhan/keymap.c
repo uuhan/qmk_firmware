@@ -581,7 +581,9 @@ void slsh_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_SLSH);
         break;
     case SINGLE_HOLD:
-        register_code(KC_RGUI);
+        if (!state->interrupted) {
+            register_code(KC_RGUI);
+        }
         break;
     case DOUBLE_TAP:
         break;
