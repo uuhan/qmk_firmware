@@ -103,16 +103,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _____, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC     ,RGB_HUD       , RGB_RMOD, RGB_HUI        , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
     _____, KC_Q   , KC_WH_U, KC_MS_U, KC_WH_D, KC_LGUI     ,RGB_SAD       , RGB_TOG , RGB_SAI        , KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , _____  ,
     _____, _____  , KC_MS_L, KC_MS_D, KC_MS_R, KC_LCTL     ,RGB_VAD       , _____   , RGB_VAI        , KC_H   , KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN4, KC_BTN5,
-    _____, KC_Z   , KC_X   , KC_C   , KC_V   , KC_LALT     ,DYN_REC_START2, _____   , DYN_MACRO_PLAY2, KC_N   , KC_M   , _____  , _____  , _____  , _____  ,
-    _____, _____  , _____  , _____  , KC_BTN2, TD(TD_CLICK),KC_BTN3 , _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____
+    _____, KC_Z   , KC_WH_L, KC_BTN3, KC_WH_R, KC_LALT     ,DYN_REC_START2, _____   , DYN_MACRO_PLAY2, KC_N   , KC_M   , _____  , _____  , _____  , _____  ,
+    _____, _____  , _____  , _____  , KC_BTN2, TD(TD_CLICK),KC_BTN3       , _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____
   ),
 
   [LAYER_MOUSE_R] = KEYMAP(
-    _____  , KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, _____  , _____, _____  , KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
-    _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____, _____  , KC_RGUI, KC_WH_D, KC_MS_U, KC_WH_U, _____  , _____  ,
-    KC_ACL2, KC_ACL0, KC_BTN2, KC_BTN3, KC_BTN1, _____  , _____  , _____, _____  , KC_RCTL, KC_MS_L, KC_MS_D, KC_MS_R, _____  , _____  ,
-    _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____, _____  , KC_RALT, _____  , _____  , _____  , _____  , _____  ,
-    _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____, KC_BTN3, TD(TD_CLICK), KC_BTN2, _____  , _____  , _____  , _____
+    _____  , KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, _____  , _____, _____  , KC_CIRC     , KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
+    _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____, _____  , KC_RGUI     , KC_WH_D, KC_MS_U, KC_WH_U, _____  , _____  ,
+    KC_ACL2, KC_ACL0, KC_BTN2, KC_BTN3, KC_BTN1, _____  , _____  , _____, _____  , KC_RCTL     , KC_MS_L, KC_MS_D, KC_MS_R, _____  , _____  ,
+    _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____, _____  , KC_RALT     , KC_WH_L, KC_BTN3, KC_WH_R, _____  , _____  ,
+    _____  , _____  , _____  , _____  , _____  , _____  , _____  , _____, KC_BTN3, TD(TD_CLICK), KC_BTN2, KC_BTN4, KC_BTN5, _____  , _____
   ),
 
   [LAYER_SPACEFN] = KEYMAP(
