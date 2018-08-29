@@ -615,7 +615,7 @@ void slsh_reset (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_RGUI);
         break;
     case DOUBLE_TAP:
-        SEND_STRING("?");
+        SEND_STRING("//");
         break;
     case DOUBLE_HOLD:
         unregister_code(KC_RSFT);
