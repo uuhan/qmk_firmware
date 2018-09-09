@@ -212,18 +212,18 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
         }
         break;
     case DOUBLE_TAP:
-        if (!state->interrupted) {
+        if (!state->interrupted && !lsft_mask) {
             register_code(KC_LCTL);
             register_code(KC_SPC);
             unregister_code(KC_SPC);
             unregister_code(KC_LCTL);
+            return;
 
-        } else {
-            register_code(KC_SPC);
-            unregister_code(KC_SPC);
-            register_code(KC_SPC);
-            unregister_code(KC_SPC);
         }
+        register_code(KC_SPC);
+        unregister_code(KC_SPC);
+        register_code(KC_SPC);
+        unregister_code(KC_SPC);
         break;
     case DOUBLE_HOLD:
         register_code(KC_LGUI);
@@ -232,6 +232,11 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_SPC);
         unregister_code(KC_SPC);
         register_code(KC_SPC);
+    default:
+        for (uint8_t idx = 0; idx < state->count; idx++) {
+            register_code(KC_SPC);
+            unregister_code(KC_SPC);
+        }
   }
 }
 
