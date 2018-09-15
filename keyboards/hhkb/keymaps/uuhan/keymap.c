@@ -218,12 +218,8 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
             unregister_code(KC_SPC);
             unregister_code(KC_LCTL);
             return;
-
         }
-        register_code(KC_SPC);
-        unregister_code(KC_SPC);
-        register_code(KC_SPC);
-        unregister_code(KC_SPC);
+        goto d;
         break;
     case DOUBLE_HOLD:
         register_code(KC_LGUI);
@@ -232,7 +228,7 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_SPC);
         unregister_code(KC_SPC);
         register_code(KC_SPC);
-    default:
+d:  default:
         for (uint8_t idx = 0; idx < state->count; idx++) {
             register_code(KC_SPC);
             unregister_code(KC_SPC);
@@ -241,22 +237,28 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void space_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_space_state.state) {
-    case SINGLE_TAP:
-        break;
-    case SINGLE_HOLD:
-        layer_off(MIRROR);
-        layer_off(SPACEFN);
-        break;
-    case DOUBLE_TAP:
-        break;
-    case DOUBLE_HOLD:
-        unregister_code(KC_LGUI);
-        break;
-    case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_SPC);
-  }
-  xtap_space_state.state = 0;
+    switch (xtap_space_state.state) {
+        case SINGLE_TAP:
+            break;
+        case SINGLE_HOLD:
+            layer_off(MIRROR);
+            layer_off(SPACEFN);
+            break;
+        case DOUBLE_TAP:
+            break;
+        case DOUBLE_HOLD:
+            unregister_code(KC_LGUI);
+            break;
+        case DOUBLE_SINGLE_TAP:
+            unregister_code(KC_SPC);
+    }
+    if (state->interrupted) {
+        uint8_t lgui_mask = get_mods() & (MOD_BIT(KC_LGUI));
+        uint8_t lctl_mask = get_mods() & (MOD_BIT(KC_LCTL));
+        if (lgui_mask) unregister_code(KC_LGUI);
+        if (lctl_mask) unregister_code(KC_LCTL);
+    }
+    xtap_space_state.state = 0;
 }
 
 void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
