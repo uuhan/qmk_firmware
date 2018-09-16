@@ -250,12 +250,6 @@ void space_reset (qk_tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             break;
     }
-    if (state->interrupted) {
-        uint8_t lgui_mask = get_mods() & (MOD_BIT(KC_LGUI));
-        uint8_t lctl_mask = get_mods() & (MOD_BIT(KC_LCTL));
-        if (lgui_mask) unregister_code(KC_LGUI);
-        if (lctl_mask) unregister_code(KC_LCTL);
-    }
     xtap_space_state.state = 0;
 }
 
