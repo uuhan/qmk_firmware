@@ -221,7 +221,7 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
         goto space;
         break;
     case DOUBLE_HOLD:
-        register_code(KC_LGUI);
+        layer_on(MIRROR);
         break;
     case DOUBLE_SINGLE_TAP:
 space:
@@ -245,7 +245,7 @@ void space_reset (qk_tap_dance_state_t *state, void *user_data) {
         case DOUBLE_TAP:
             break;
         case DOUBLE_HOLD:
-            unregister_code(KC_LGUI);
+            layer_off(MIRROR);
             break;
         case DOUBLE_SINGLE_TAP:
             break;
