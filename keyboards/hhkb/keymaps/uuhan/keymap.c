@@ -199,7 +199,6 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_space_state.state) {
     case SINGLE_TAP:
         register_code(KC_SPC);
-        unregister_code(KC_SPC);
         break;
     case SINGLE_HOLD:
         if (lsft_mask) {
@@ -219,16 +218,14 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
             unregister_code(KC_LCTL);
             return;
         }
-        goto d;
+        goto space;
         break;
     case DOUBLE_HOLD:
         register_code(KC_LGUI);
         break;
     case DOUBLE_SINGLE_TAP:
-        register_code(KC_SPC);
-        unregister_code(KC_SPC);
-        register_code(KC_SPC);
-d:  default:
+space:
+    default:
         for (uint8_t idx = 0; idx < state->count; idx++) {
             register_code(KC_SPC);
             unregister_code(KC_SPC);
@@ -239,6 +236,7 @@ d:  default:
 void space_reset (qk_tap_dance_state_t *state, void *user_data) {
     switch (xtap_space_state.state) {
         case SINGLE_TAP:
+            unregister_code(KC_SPC);
             break;
         case SINGLE_HOLD:
             layer_off(MIRROR);
@@ -250,7 +248,7 @@ void space_reset (qk_tap_dance_state_t *state, void *user_data) {
             unregister_code(KC_LGUI);
             break;
         case DOUBLE_SINGLE_TAP:
-            unregister_code(KC_SPC);
+            break;
     }
     if (state->interrupted) {
         uint8_t lgui_mask = get_mods() & (MOD_BIT(KC_LGUI));
@@ -265,7 +263,7 @@ void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_scln_state.state = cur_dance(state);
   switch (xtap_scln_state.state) {
     case SINGLE_TAP:
-        register_code(KC_SCLN);
+        goto scln;
         break;
     case SINGLE_HOLD:
         layer_on(MOUSE_R);
@@ -278,16 +276,18 @@ void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_RCTL);
         break;
     case DOUBLE_SINGLE_TAP:
-        register_code(KC_SCLN);
-        unregister_code(KC_SCLN);
-        register_code(KC_SCLN);
+scln:
+    default:
+        for (uint8_t idx = 0; idx < state->count; idx++) {
+            register_code(KC_SCLN);
+            unregister_code(KC_SCLN);
+        }
   }
 }
 
 void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (xtap_scln_state.state) {
     case SINGLE_TAP:
-        unregister_code(KC_SCLN);
         break;
     case SINGLE_HOLD:
         layer_off(MOUSE_R);
@@ -300,7 +300,7 @@ void scln_reset (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_RCTL);
         break;
     case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_SCLN);
+        break;
   }
   xtap_scln_state.state = 0;
 }
@@ -309,8 +309,7 @@ void quote_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_state.state = cur_dance(state);
   switch (xtap_state.state) {
     case SINGLE_TAP:
-        register_code(KC_QUOT);
-        unregister_code(KC_QUOT);
+        goto quot;
         break;
     case SINGLE_HOLD:
         layer_on(MIRROR);
@@ -323,9 +322,12 @@ void quote_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_RALT);
         break;
     case DOUBLE_SINGLE_TAP:
-        register_code(KC_QUOT);
-        unregister_code(KC_QUOT);
-        register_code(KC_QUOT);
+quot:
+    default:
+        for (uint8_t idx = 0; idx < state->count; idx++) {
+            register_code(KC_QUOT);
+            unregister_code(KC_QUOT);
+        }
   }
 }
 
@@ -344,7 +346,7 @@ void quote_reset (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_RALT);
         break;
     case DOUBLE_SINGLE_TAP:
-        unregister_code(KC_QUOT);
+        break;
   }
   xtap_state.state = 0;
 }
