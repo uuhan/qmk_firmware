@@ -3,6 +3,8 @@
 #ifndef CONFIG_UUHAN_H
 #define CONFIG_UUHAN_H
 
+// #define FORCE_NKRO
+
 // Bring in original defaults
 #include "../../config.h"
 
