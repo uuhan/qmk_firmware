@@ -5,6 +5,14 @@
 #include "mousekey.h"
 #include "process_keycode/process_tap_dance.h"
 
+#define WITHOUT_MODS(...) \
+    do { \
+        const uint8_t _real_mods = get_mods(); \
+        clear_mods(); \
+        { __VA_ARGS__ } \
+        set_mods(_real_mods); \
+    } while (0)
+
 extern keymap_config_t keymap_config;
 
 enum layers {
@@ -33,6 +41,7 @@ enum {
 };
 
 enum my_keycods {
+    CLEAR_MODS = SAFE_RANGE,
     DYNAMIC_MACRO_RANGE,
 };
 
@@ -55,7 +64,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
         CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(MOD_RCTL, KC_ENT),
         OSM(MOD_LSFT), GUI_T(KC_Z), CTL_T(KC_X), ALT_T(KC_C), KC_V, KC_B, KC_N, KC_M, RALT_T(KC_COMM), RCTL_T(KC_DOT), RGUI_T(KC_SLSH), MT(MOD_RSFT, KC_ESC), MO(HHKB),
-                        KC_LALT, LT(MIRROR, KC_GRV), TD(SPACE), TT(MIRROR), KC_RALT),
+                        KC_LALT, LT(MIRROR, KC_GRV), TD(SPACE), TT(MIRROR), RALT_T(CLEAR_MODS)),
 
     [HHKB] = LAYOUT(
         KC_GRV , KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_INS, KC_DEL,
@@ -345,6 +354,7 @@ void quote_reset (qk_tap_dance_state_t *state, void *user_data) {
   xtap_state.state = 0;
 }
 
+// tap dance
 qk_tap_dance_action_t tap_dance_actions[] = {
     [CLICK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,click_finished,click_reset),
     [SPACE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL,space_finished,space_reset),
@@ -355,6 +365,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM fn_actions[] = {
 };
 
+// 拦截用户输入的keycode
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     uint16_t macro_kc = (keycode == MO(HHKB) ? DYN_REC_STOP : keycode);
     if (!process_record_dynamic_macro(macro_kc, record)) {
@@ -362,8 +373,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
-    default:
-        return true;
+        case CLEAR_MODS:
+            clear_mods();
+        default:
+            return true;
     }
 
     return true;
