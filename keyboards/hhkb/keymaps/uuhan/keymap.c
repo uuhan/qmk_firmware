@@ -41,7 +41,6 @@ enum {
 };
 
 enum my_keycods {
-    CLEAR_MODS = SAFE_RANGE,
     DYNAMIC_MACRO_RANGE,
 };
 
@@ -64,7 +63,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         GUI_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSPC,
         CTL_T(KC_ESC), LT(MOUSE_L, KC_A), LT(FNKEYS, KC_S), KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, TD(SCLN), TD(QUOTE), MT(MOD_RCTL, KC_ENT),
         OSM(MOD_LSFT), GUI_T(KC_Z), CTL_T(KC_X), ALT_T(KC_C), KC_V, KC_B, KC_N, KC_M, RALT_T(KC_COMM), RCTL_T(KC_DOT), RGUI_T(KC_SLSH), MT(MOD_RSFT, KC_ESC), MO(HHKB),
-                        KC_LALT, LT(MIRROR, KC_GRV), TD(SPACE), TT(MIRROR), RALT_T(CLEAR_MODS)),
+                        KC_LALT, LT(MIRROR, KC_GRV), TD(SPACE), TT(MIRROR), DYN_REC_START1),
 
     [HHKB] = LAYOUT(
         KC_GRV , KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_INS, KC_DEL,
@@ -225,7 +224,6 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
             register_code(KC_SPC);
             unregister_code(KC_SPC);
             unregister_code(KC_LCTL);
-            clear_mods();
             return;
         }
         goto space;
@@ -374,8 +372,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
-        case CLEAR_MODS:
+        case MO(HHKB):
+        case DYN_MACRO_PLAY1:
             clear_mods();
+            return true;
         default:
             return true;
     }
