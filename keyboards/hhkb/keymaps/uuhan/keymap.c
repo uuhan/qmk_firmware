@@ -204,6 +204,7 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
 void space_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_space_state.state = cur_dance(state);
   uint8_t lsft_mask = get_mods() & (MOD_BIT(KC_LSFT));
+  uint8_t mods_mask = get_mods();
   switch (xtap_space_state.state) {
     case SINGLE_TAP:
         register_code(KC_SPC);
@@ -219,11 +220,13 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
         }
         break;
     case DOUBLE_TAP:
-        if (!state->interrupted && !lsft_mask) {
+        if (!state->interrupted && !mods_mask) {
             register_code(KC_LCTL);
             register_code(KC_SPC);
             unregister_code(KC_SPC);
             unregister_code(KC_LCTL);
+            return;
+        } else {
             clear_mods();
             return;
         }
