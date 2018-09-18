@@ -224,6 +224,7 @@ void space_finished (qk_tap_dance_state_t *state, void *user_data) {
             register_code(KC_SPC);
             unregister_code(KC_SPC);
             unregister_code(KC_LCTL);
+            clear_mods();
             return;
         }
         goto space;
