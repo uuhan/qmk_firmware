@@ -377,6 +377,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     switch (keycode) {
         case MO(HHKB):
+        case KC_ESC:
         case DYN_MACRO_PLAY1:
             clear_mods();
             return true;
