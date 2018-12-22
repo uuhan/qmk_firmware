@@ -750,7 +750,7 @@ void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_ENT);
         break;
     case DOUBLE_HOLD:
-        register_code(KC_TAB);
+        layer_on(_RAISE);
         break;
     case DOUBLE_SINGLE_TAP:
         register_code(KC_TAB);
@@ -776,7 +776,7 @@ void lower_reset (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_ENT);
         break;
     case DOUBLE_HOLD:
-        unregister_code(KC_TAB);
+        layer_off(_RAISE);
         break;
     case DOUBLE_SINGLE_TAP:
         unregister_code(KC_TAB);
