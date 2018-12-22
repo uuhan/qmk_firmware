@@ -152,7 +152,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_SPACEFN] = LAYOUT_planck_mit(
-  GUI_T(KC_BSPC), KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , KC_GRV , KC_UNDS, KC_PLUS , KC_TILD , KC_PIPE , KC_ESC ,
+  KC_ESC        , KC_LBRC, KC_RBRC, KC_UP  , KC_PIPE, KC_TAB , KC_GRV , KC_UNDS, KC_PLUS , KC_TILD , KC_PIPE , _______ ,
   CTL_T(KC_ENT) , KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSLS, _______, KC_MINS, KC_EQL  , KC_BSLS , KC_GRV  , _______,
   KC_LSFT       , KC_RPRN, KC_LCBR, KC_RCBR, KC_BSLS, KC_UNDS, KC_PLUS, KC_HOME, KC_PGUP , KC_PGDN , KC_END  , KC_TRNS,
   KC_LALT       , _______, _______, _______, LOWER  , _______, RAISE  , KC_LEFT, KC_DOWN , KC_UP   , KC_RGHT
