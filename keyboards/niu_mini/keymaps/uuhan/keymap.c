@@ -869,8 +869,6 @@ const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
   {{11, 3}, {10, 3}, {9, 3}, {8, 3}, {7, 3}, {6, 3}, {5, 3}, {4, 3}, {3, 3}, {2, 3}, {1, 3}, {0, 3}},
 };
 
-LEADER_EXTERNS();
-
 void matrix_scan_user(void) {
     for (uint8_t index = 0 ; index <= TH_EVENTS_COUNT ; ++index ) {
         tap_hold_t *th_event = &th_events[index];
@@ -879,10 +877,5 @@ void matrix_scan_user(void) {
             unregister_code(th_event->kc_hold);
             th_event->is_pressed = false;
         }
-    }
-
-    LEADER_DICTIONARY() {
-        leading = false;
-        leader_end();
     }
 }
