@@ -549,6 +549,8 @@ void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
     case DOUBLE_TAP:
         add_weak_mods(MOD_LSFT);
         register_code(KC_SCLN);
+        unregister_code(KC_SCLN);
+        register_code(KC_SCLN);
         break;
     case DOUBLE_HOLD:
         register_code(KC_RALT);
