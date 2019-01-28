@@ -532,6 +532,7 @@ void click_reset (qk_tap_dance_state_t *state, void *user_data) {
 void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
   xtap_scln_state.state = cur_dance(state);
   uint8_t rctl_mask = get_mods() & (MOD_BIT(KC_RCTL));
+  uint8_t lsft_mask = get_mods() & (MOD_BIT(KC_LSFT));
   switch (xtap_scln_state.state) {
     case SINGLE_TAP:
         register_code(KC_SCLN);
@@ -549,8 +550,10 @@ void scln_finished (qk_tap_dance_state_t *state, void *user_data) {
     case DOUBLE_TAP:
         add_weak_mods(MOD_LSFT);
         register_code(KC_SCLN);
-        unregister_code(KC_SCLN);
-        register_code(KC_SCLN);
+        if (lsft_mask) {
+            unregister_code(KC_SCLN);
+            register_code(KC_SCLN);
+        } else {}
         break;
     case DOUBLE_HOLD:
         register_code(KC_RALT);
