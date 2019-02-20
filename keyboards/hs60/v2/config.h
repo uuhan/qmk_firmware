@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATRIX_COL_PINS { A13, A10, A9, A14, A15, B8, B9, C13, C14, C15, A0, A1, A2, A3 }
 // To enable debugger set A13 A14 -> A5 A6
 
-/* COL2ROW, ROW2COL, or CUSTOM_MATRIX */
+/* COL2ROW, ROW2COL*/
 #define DIODE_DIRECTION COL2ROW
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
@@ -70,10 +70,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 //#define FORCE_NKRO
 
-/* key combination for magic key command */
-#define IS_COMMAND() ( \
-    keyboard_report->mods == (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT)) \
-)
+/*
+ * Magic Key Options
+ *
+ * Magic keys are hotkey commands that allow control over firmware functions of
+ * the keyboard. They are best used in combination with the HID Listen program,
+ * found here: https://www.pjrc.com/teensy/hid_listen.html
+ *
+ * The options below allow the magic key functionality to be changed. This is
+ * useful if your keyboard/keypad is missing keys and you want magic key support.
+ *
+ */
 
 /* Backlight options */
 
