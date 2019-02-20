@@ -863,9 +863,9 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_DOT]        = ACTION_TAP_DANCE_DOUBLE(KC_DOT, KC_EQL),
 };
 
-const uint16_t PROGMEM fn_actions[] = {
-    [0] = ACTION_MODS_TAP_TOGGLE(MOD_LSFT),
-};
+/* const uint16_t PROGMEM fn_actions[] = { */
+/*     [0] = ACTION_MODS_TAP_TOGGLE(MOD_LSFT), */
+/* }; */
 
 const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
   {{11, 0}, {10, 0}, {9, 0}, {8, 0}, {7, 0}, {6, 0}, {5, 0}, {4, 0}, {3, 0}, {2, 0}, {1, 0}, {0, 0}},
