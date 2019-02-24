@@ -7,3 +7,5 @@ AUDIO_ENABLE     = no
 UNICODE_ENABLE   = no
 BOOTMAGIC_ENABLE = no
 API_SYSEX_ENABLE = no
+
+EXTRAFLAGS      += -flto
